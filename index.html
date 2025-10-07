@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Science Knowledge Assessment</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+    <script defer src="app.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="branding">
+            <h1>Data Science Knowledge Assessment</h1>
+            <p class="tagline">Evaluate your strengths across core data science domains.</p>
+        </div>
+    </header>
+
+    <main id="app" class="app-main">
+        <section id="welcome-screen" class="view">
+            <div class="card">
+                <h2>Welcome!</h2>
+                <p>
+                    This assessment covers statistics, machine learning, programming, data manipulation,
+                    mathematics, and domain knowledge. Your responses will help identify strengths and areas for growth.
+                </p>
+                <div class="config-summary" id="config-summary"></div>
+                <button id="start-btn" class="primary-btn">Start Assessment</button>
+            </div>
+        </section>
+
+        <section id="quiz-screen" class="view hidden" aria-live="polite">
+            <div class="card">
+                <header class="quiz-header">
+                    <div class="progress-wrapper">
+                        <span id="progress-text">Question 1</span>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div id="timer" class="timer" aria-hidden="true"></div>
+                </header>
+
+                <div id="question-container" class="question-container"></div>
+
+                <footer class="quiz-controls">
+                    <button id="prev-btn" class="secondary-btn">Previous</button>
+                    <button id="next-btn" class="secondary-btn">Next</button>
+                    <button id="review-btn" class="secondary-btn">Review Answers</button>
+                    <button id="submit-btn" class="primary-btn">Submit</button>
+                </footer>
+            </div>
+        </section>
+
+        <section id="review-screen" class="view hidden">
+            <div class="card">
+                <h2>Review Your Answers</h2>
+                <p>Double-check your selections before submitting.</p>
+                <div id="review-list" class="review-list"></div>
+                <div class="review-actions">
+                    <button id="edit-answers-btn" class="secondary-btn">Back to Questions</button>
+                    <button id="final-submit-btn" class="primary-btn">Submit Assessment</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="results-screen" class="view hidden">
+            <div class="card">
+                <header class="results-header">
+                    <h2>Your Results</h2>
+                    <p id="result-summary"></p>
+                </header>
+                <div class="results-grid">
+                    <div class="results-overview">
+                        <canvas id="category-chart" aria-label="Score by category" role="img"></canvas>
+                        <div class="score-breakdown" id="score-breakdown"></div>
+                        <div class="strengths-weaknesses" id="strengths-weaknesses"></div>
+                    </div>
+                    <div class="explanations" id="explanations"></div>
+                </div>
+                <div class="results-actions">
+                    <button id="retry-btn" class="secondary-btn">Retake Assessment</button>
+                    <button id="print-btn" class="primary-btn">Download / Print Results</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>Built with vanilla HTML, CSS, and JavaScript.</p>
+    </footer>
+</body>
+</html>

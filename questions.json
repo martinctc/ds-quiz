@@ -1,0 +1,404 @@
+{
+    "statistics": [
+        {
+            "id": "statistics-1",
+            "question": "Which scenario best describes a Type I error?",
+            "options": [
+                "Rejecting a false null hypothesis",
+                "Failing to reject a true null hypothesis",
+                "Rejecting a true null hypothesis",
+                "Failing to reject a false null hypothesis"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "A Type I error occurs when the null hypothesis is true but is incorrectly rejected."
+        },
+        {
+            "id": "statistics-2",
+            "question": "A 95% confidence interval for a mean implies what?",
+            "options": [
+                "95% of the sample data fall within the interval",
+                "There is a 95% chance the true mean is within the computed interval",
+                "95% of future observations will fall within the interval",
+                "The true mean must be within the interval"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A 95% confidence interval means that if we repeated sampling many times, about 95% of those intervals would contain the true mean."
+        },
+        {
+            "id": "statistics-3",
+            "question": "When is the chi-square test for independence appropriate?",
+            "options": [
+                "Comparing means of two independent groups",
+                "Testing relationships between two categorical variables",
+                "Comparing variances of two populations",
+                "Testing correlations between two continuous variables"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "The chi-square test for independence evaluates whether two categorical variables are related."
+        },
+        {
+            "id": "statistics-4",
+            "question": "What does the Central Limit Theorem state?",
+            "options": [
+                "Sample means are normally distributed regardless of sample size",
+                "Population distributions become normal as sample size increases",
+                "Sampling distributions of the mean approach normality as sample size grows",
+                "Large samples are always unbiased"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "The Central Limit Theorem states that the sampling distribution of the mean approximates a normal distribution as sample size increases, regardless of population distribution."
+        },
+        {
+            "id": "statistics-5",
+            "question": "Which statistic is most robust to outliers?",
+            "options": [
+                "Mean",
+                "Standard deviation",
+                "Variance",
+                "Median"
+            ],
+            "correctAnswer": 3,
+            "difficulty": "easy",
+            "explanation": "The median is resistant to outliers, whereas the mean, variance, and standard deviation are strongly affected."
+        }
+    ],
+    "machine_learning": [
+        {
+            "id": "ml-1",
+            "question": "Which algorithm is most appropriate for reducing dimensionality while preserving variance?",
+            "options": [
+                "K-means clustering",
+                "Principal Component Analysis",
+                "Naive Bayes",
+                "Decision Trees"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Principal Component Analysis is a linear dimensionality reduction technique that preserves variance by projecting data onto orthogonal components."
+        },
+        {
+            "id": "ml-2",
+            "question": "What is the main purpose of regularization in linear models?",
+            "options": [
+                "Increase training accuracy",
+                "Handle missing data",
+                "Prevent overfitting by penalizing large coefficients",
+                "Improve interpretability by removing features"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "Regularization adds a penalty term to the loss function to discourage complex models with large coefficients, thereby reducing overfitting."
+        },
+        {
+            "id": "ml-3",
+            "question": "Which evaluation metric is most appropriate for imbalanced classification?",
+            "options": [
+                "Accuracy",
+                "R-squared",
+                "Precision-Recall AUC",
+                "Mean Squared Error"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "Precision-Recall AUC focuses on the positive class performance and is more informative than accuracy for imbalanced datasets."
+        },
+        {
+            "id": "ml-4",
+            "question": "Gradient Boosting differs from Random Forests primarily in that it...",
+            "options": [
+                "Builds trees independently in parallel",
+                "Builds trees sequentially to correct previous errors",
+                "Uses bagging instead of boosting",
+                "Relies on k-means clusters"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Gradient Boosting trains trees sequentially, where each new tree focuses on correcting the residuals of the prior ensemble."
+        },
+        {
+            "id": "ml-5",
+            "question": "In neural networks, the vanishing gradient problem is most associated with...",
+            "options": [
+                "Activation functions with large positive slopes",
+                "Activation functions like sigmoid causing gradients to shrink",
+                "Using batch normalization",
+                "Skip connections in residual networks"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Sigmoid and tanh activations can squash gradients to very small values, making it difficult for early layers to learn."
+        }
+    ],
+    "programming": [
+        {
+            "id": "prog-1",
+            "question": "What is the time complexity of accessing an element in a Python list by index?",
+            "options": [
+                "O(1)",
+                "O(log n)",
+                "O(n)",
+                "O(n log n)"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "Lists in Python are backed by dynamic arrays, so index access is O(1)."
+        },
+        {
+            "id": "prog-2",
+            "question": "Which Python statement ensures a file is automatically closed after use?",
+            "options": [
+                "try/except",
+                "with open(...) as f",
+                "finally",
+                "lambda"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "The context manager pattern `with open(...) as f` ensures the file is closed when the block exits."
+        },
+        {
+            "id": "prog-3",
+            "question": "In version control, which command creates a new branch in Git?",
+            "options": [
+                "git commit",
+                "git branch <name>",
+                "git merge <name>",
+                "git push"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "`git branch <name>` creates a new branch reference."
+        },
+        {
+            "id": "prog-4",
+            "question": "Which data structure is most appropriate for implementing a LIFO stack in Python?",
+            "options": [
+                "list with append/pop",
+                "set",
+                "dictionary",
+                "tuple"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "A Python list with `append` and `pop` operations efficiently supports LIFO behavior."
+        },
+        {
+            "id": "prog-5",
+            "question": "What does Big-O notation describe?",
+            "options": [
+                "Exact runtime of an algorithm",
+                "Average runtime of an algorithm",
+                "Upper bound on growth rate of runtime or space",
+                "Number of operations per second"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "Big-O notation characterizes the upper bound on the growth rate of runtime or space as input size increases."
+        }
+    ],
+    "data_manipulation": [
+        {
+            "id": "dm-1",
+            "question": "In SQL, which clause filters rows after aggregation?",
+            "options": [
+                "WHERE",
+                "HAVING",
+                "GROUP BY",
+                "ORDER BY"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`HAVING` filters aggregated results produced by `GROUP BY`, whereas `WHERE` filters before aggregation."
+        },
+        {
+            "id": "dm-2",
+            "question": "Which pandas method combines DataFrames by aligning on columns with matching labels?",
+            "options": [
+                "merge",
+                "concat",
+                "join",
+                "pivot"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "`merge` provides SQL-style joins based on key columns, aligning rows with matching labels."
+        },
+        {
+            "id": "dm-3",
+            "question": "What is the result of `df.groupby('team').size()` in pandas?",
+            "options": [
+                "Sum of numeric columns by team",
+                "Counts of rows per team",
+                "Average value per team",
+                "Unique teams list"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "`size()` returns the number of rows in each group, providing counts per `team`."
+        },
+        {
+            "id": "dm-4",
+            "question": "Which SQL operation returns only matching rows from two tables based on a condition?",
+            "options": [
+                "LEFT JOIN",
+                "OUTER JOIN",
+                "INNER JOIN",
+                "CROSS JOIN"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "An `INNER JOIN` returns rows where the join condition evaluates to true for both tables."
+        },
+        {
+            "id": "dm-5",
+            "question": "Which technique is best for handling missing values in a feature with a skewed distribution?",
+            "options": [
+                "Drop rows with missing values",
+                "Median imputation",
+                "Mean imputation",
+                "Forward fill"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Median imputation is robust to skewed distributions and reduces the effect of outliers."
+        }
+    ],
+    "mathematics": [
+        {
+            "id": "math-1",
+            "question": "What is the derivative of f(x) = x^2 e^x?",
+            "options": [
+                "2x e^x",
+                "x^2 e^x",
+                "(2x + x^2) e^x",
+                "(2x - x^2) e^x"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "hard",
+            "explanation": "Using the product rule: f'(x) = 2x e^x + x^2 e^x = (2x + x^2) e^x."
+        },
+        {
+            "id": "math-2",
+            "question": "For a symmetric positive definite matrix, which decomposition is always possible?",
+            "options": [
+                "QR decomposition",
+                "Cholesky decomposition",
+                "Singular value decomposition",
+                "LU decomposition"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Every symmetric positive definite matrix admits a Cholesky decomposition A = LL^T with L triangular."
+        },
+        {
+            "id": "math-3",
+            "question": "What is the integral of 1 / (1 + x^2) dx?",
+            "options": [
+                "ln|x| + C",
+                "arctan(x) + C",
+                "x^2/2 + C",
+                "e^x + C"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "∫ 1/(1+x^2) dx = arctan(x) + C."
+        },
+        {
+            "id": "math-4",
+            "question": "Which statement about eigenvalues of a stochastic matrix is true?",
+            "options": [
+                "All eigenvalues are greater than 1",
+                "The largest eigenvalue is 0",
+                "The largest eigenvalue is 1",
+                "Eigenvalues are negative"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "A stochastic matrix has a largest eigenvalue of 1, corresponding to the steady-state distribution."
+        },
+        {
+            "id": "math-5",
+            "question": "For the function f(x) = ln(x), what is the second derivative?",
+            "options": [
+                "1/x",
+                "-1/x^2",
+                "1/x^2",
+                "-1/x"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The first derivative is 1/x; differentiating again gives -1/x^2."
+        }
+    ],
+    "domain_knowledge": [
+        {
+            "id": "domain-1",
+            "question": "Which phase of CRISP-DM focuses on selecting modeling techniques and building models?",
+            "options": [
+                "Business Understanding",
+                "Data Preparation",
+                "Modeling",
+                "Evaluation"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "The Modeling phase selects and applies modeling techniques to the prepared data."
+        },
+        {
+            "id": "domain-2",
+            "question": "What is data provenance primarily concerned with?",
+            "options": [
+                "Model interpretability",
+                "Tracking data lineage and transformations",
+                "Automating hyperparameter tuning",
+                "Real-time data ingestion"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Data provenance tracks where data originated and how it has been transformed, supporting reproducibility and governance."
+        },
+        {
+            "id": "domain-3",
+            "question": "Which regulation focuses on data protection and privacy in the European Union?",
+            "options": [
+                "HIPAA",
+                "GDPR",
+                "CCPA",
+                "SOX"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "The General Data Protection Regulation (GDPR) governs data protection and privacy in the EU."
+        },
+        {
+            "id": "domain-4",
+            "question": "What is the main goal of an A/B test in product analytics?",
+            "options": [
+                "Discover latent customer segments",
+                "Compare two variants to measure causal impact",
+                "Collect qualitative feedback",
+                "Monitor infrastructure performance"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A/B testing measures the causal impact of changes by comparing outcomes between control and treatment variants."
+        },
+        {
+            "id": "domain-5",
+            "question": "In data product teams, what is a key responsibility of a product manager?",
+            "options": [
+                "Writing production-grade APIs",
+                "Selecting hardware for computation",
+                "Aligning analytics work with business objectives",
+                "Designing database schemas"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "Product managers ensure data initiatives map to business goals and coordinate cross-functional stakeholders."
+        }
+    ]
+}
