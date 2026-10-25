@@ -68,6 +68,11 @@ function cacheDom() {
     dom.historySummary = document.getElementById('history-summary');
     dom.historyBody = document.getElementById('history-body');
     dom.clearHistoryBtn = document.getElementById('clear-history-btn');
+    dom.adminPanel = document.getElementById('admin-panel');
+    dom.adminPreset = document.getElementById('admin-preset');
+    dom.bankSummary = document.getElementById('bank-summary');
+    dom.adminClose = document.getElementById('admin-close');
+    dom.addQuestionForm = document.getElementById('add-question-form');
     dom.announcer = document.getElementById('sr-announcer');
 }
 
@@ -92,6 +97,16 @@ function attachEventListeners() {
 
     dom.questionContainer?.addEventListener('change', handleAnswerChange);
     dom.reviewList?.addEventListener('click', handleReviewNavigation);
+    // Swipe navigation (one‑at‑a‑time only)
+    if (state.config.displayMode !== 'all-at-once') {
+        let startX = 0;
+        dom.questionContainer.addEventListener('touchstart', e => { startX = e.changedTouches[0].clientX; });
+        dom.questionContainer.addEventListener('touchend', e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (diff > 30) navigateQuestion(1);
+            if (diff < -30) navigateQuestion(-1);
+        });
+    }
 }
 
 async function initializeApp() {
@@ -110,7 +125,22 @@ async function initializeApp() {
         state.config = config;
         state.questions = questions;
         state.selectedPreset = config.defaultPreset || (config.presets ? Object.keys(config.presets)[0] : null);
+        // Admin mode flag ( ?admin=1 )
+        state.adminMode = false;
+        try {
+            const params = new URLSearchParams(location.search);
+            if (params.get('admin') === '1') {
+                state.adminMode = true;
+                state.adminQuestions = [];
+            }
+        } catch {}
         loadHistory();
+    // Show/hide admin panel ( ?admin=1 )
+    const adminPanel = dom.adminPanel;
+    if (adminPanel) {
+        adminPanel.setAttribute('aria-hidden', state.adminMode ? 'false' : 'true');
+    }
+    renderLengthSelector();
         renderLengthSelector();
         renderConfigSummary();
         renderHistory();

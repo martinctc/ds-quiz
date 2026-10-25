@@ -44,6 +44,11 @@
                         <button id="clear-history-btn" class="secondary-btn" type="button">Clear history</button>
                     </div>
                     <p id="history-summary" class="history-summary"></p>
+
+<details class="history-expand">
+    <summary>Show detailed history</summary>
+    <div class="history-table-container"></div>
+</details>
                     <div class="history-table-wrapper">
                         <table class="history-table">
                             <caption class="sr-only">Attempts saved in this browser</caption>
@@ -128,5 +133,32 @@
     <footer class="app-footer">
         <p>Built with vanilla HTML, CSS, and JavaScript.</p>
     </footer>
+
+    <!-- Admin panel (shown when ?admin=1) -->
+    <aside id="admin-panel" class="admin-panel" aria-hidden="true">
+        <h3>Admin Tools</h3>
+        <p>Current preset: <span id="admin-preset"></span></p>
+        <section>
+            <h4>Add a question</h4>
+            <form id="add-question-form">
+                <input name="question" placeholder="Question text" required />
+                <div>
+                    <label><input type="radio" name="optA" required /> A</label>
+                    <label><input type="radio" name="optB" /> B</label>
+                    <label><input type="radio" name="optC" /> C</label>
+                    <label><input type="radio" name="optD" /> D</label>
+                </div>
+                <input name="correctAnswer" type="number" min="0" max="3" placeholder="Correct option (0‑3)" required />
+                <input name="explanation" placeholder="Why is this correct?" required />
+                <input name="category" placeholder="Category (e.g. statistics)" required />
+                <button type="submit">Add to current bank</button>
+            </form>
+        </section>
+        <section>
+            <h4>Current question bank summary</h4>
+            <pre id="bank-summary"></pre>
+        </section>
+        <button id="admin-close" aria-label="Close admin panel">Close</button>
+    </aside>
 </body>
 </html>
