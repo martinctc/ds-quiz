@@ -161,6 +161,16 @@ function validateConfig(cfg, bank) {
     }
   }
 
+  if (cfg.showHistory !== undefined && typeof cfg.showHistory !== 'boolean') {
+    errors.push('config.json: "showHistory" must be a boolean');
+  }
+
+  if (cfg.historyLimit !== undefined) {
+    if (!Number.isInteger(cfg.historyLimit) || cfg.historyLimit < 1) {
+      errors.push('config.json: "historyLimit" must be a positive integer');
+    }
+  }
+
   for (const key of ['passingScore', 'strengthThreshold', 'weaknessThreshold']) {
     if (typeof cfg[key] !== 'number' || cfg[key] < 0 || cfg[key] > 100) {
       errors.push(`config.json: "${key}" must be a number between 0 and 100`);

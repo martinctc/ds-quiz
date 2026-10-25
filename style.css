@@ -1,16 +1,19 @@
 :root {
     --bg-color: #f5f7fb;
     --card-bg: #ffffff;
-    --primary: #4a6cf7;
-    --primary-dark: #3858d6;
+    --primary: #3f5fe0;
+    --primary-dark: #2f4bc4;
     --secondary: #1f2937;
     --accent: #10b981;
+    --accent-text: #047857;
     --warning: #f97316;
+    --warning-text: #b45309;
     --danger: #ef4444;
+    --danger-text: #b91c1c;
     --border: #e5e7eb;
     --text-primary: #111827;
     --text-secondary: #4b5563;
-    --muted: #9ca3af;
+    --muted: #6b7280;
     --radius-lg: 18px;
     --radius-md: 12px;
     --shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
@@ -36,6 +39,55 @@ a {
     color: inherit;
 }
 
+.skip-link {
+    position: absolute;
+    top: -4rem;
+    left: 1rem;
+    z-index: 100;
+    background-color: var(--secondary);
+    color: #ffffff;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+:focus-visible {
+    outline: 3px solid rgba(63, 95, 224, 0.45);
+    outline-offset: 2px;
+}
+
+#app:focus {
+    outline: none;
+}
+
+.question-text:focus {
+    outline: none;
+}
+
+.question-text:focus-visible {
+    outline: 3px solid rgba(63, 95, 224, 0.35);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
 .app-header,
 .app-footer {
     padding: 1.5rem 1rem;
@@ -44,7 +96,7 @@ a {
 }
 
 .app-header {
-    background: linear-gradient(135deg, rgba(74, 108, 247, 0.1), rgba(16, 185, 129, 0.08));
+    background: linear-gradient(135deg, rgba(63, 95, 224, 0.1), rgba(16, 185, 129, 0.08));
 }
 
 .branding h1 {
@@ -103,6 +155,100 @@ a {
     margin: 0.75rem 0 1rem;
 }
 
+.history-section {
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.history-header h3 {
+    font-size: 1.1rem;
+}
+
+.history-summary {
+    color: var(--text-secondary);
+}
+
+.history-table-wrapper {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.history-table caption {
+    text-align: left;
+}
+
+.history-table th,
+.history-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.history-table thead th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.history-table tbody th {
+    font-weight: 600;
+}
+
+.result-pill {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.result-pill.pass {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #065f46;
+}
+
+.result-pill.fail {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: var(--danger-text);
+}
+
+.history-note {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.length-fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.length-fieldset legend {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
 .length-selector {
     display: grid;
     gap: 0.5rem;
@@ -118,6 +264,11 @@ a {
     background-color: #ffffff;
     cursor: pointer;
     transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.length-option:focus-within {
+    outline: 3px solid rgba(63, 95, 224, 0.35);
+    outline-offset: 2px;
 }
 
 .length-option:hover {
@@ -158,7 +309,7 @@ a {
 .primary-btn {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: #ffffff;
-    box-shadow: 0 12px 24px rgba(74, 108, 247, 0.3);
+    box-shadow: 0 12px 24px rgba(63, 95, 224, 0.3);
 }
 
 .secondary-btn {
@@ -173,8 +324,16 @@ a {
 
 .primary-btn:focus-visible,
 .secondary-btn:focus-visible {
-    outline: 3px solid rgba(74, 108, 247, 0.3);
+    outline: 3px solid rgba(63, 95, 224, 0.3);
     outline-offset: 2px;
+}
+
+.primary-btn:disabled,
+.secondary-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .secondary-btn.review-jump {
@@ -213,10 +372,15 @@ a {
 
 .timer {
     font-weight: 600;
-    color: var(--accent);
+    color: var(--accent-text);
     background-color: rgba(16, 185, 129, 0.1);
     border-radius: 999px;
     padding: 0.4rem 0.9rem;
+}
+
+.timer.warning {
+    color: var(--danger-text);
+    background-color: rgba(239, 68, 68, 0.12);
 }
 
 .question-container {
@@ -272,23 +436,23 @@ a {
 }
 
 .badge.category {
-    background-color: rgba(74, 108, 247, 0.12);
+    background-color: rgba(63, 95, 224, 0.12);
     color: var(--primary);
 }
 
 .badge.difficulty.easy {
     background-color: rgba(16, 185, 129, 0.15);
-    color: var(--accent);
+    color: var(--accent-text);
 }
 
 .badge.difficulty.medium {
     background-color: rgba(249, 115, 22, 0.15);
-    color: var(--warning);
+    color: var(--warning-text);
 }
 
 .badge.difficulty.hard {
     background-color: rgba(239, 68, 68, 0.15);
-    color: var(--danger);
+    color: var(--danger-text);
 }
 
 .option-list {
@@ -313,13 +477,23 @@ a {
     accent-color: var(--primary);
 }
 
-.option label {
+.option input:focus-visible,
+.length-option input:focus-visible {
+    outline: none;
+}
+
+.option span {
     cursor: pointer;
+}
+
+.option:focus-within {
+    outline: 3px solid rgba(63, 95, 224, 0.35);
+    outline-offset: 2px;
 }
 
 .option:hover {
     border-color: var(--primary);
-    box-shadow: 0 6px 16px rgba(74, 108, 247, 0.15);
+    box-shadow: 0 6px 16px rgba(63, 95, 224, 0.15);
 }
 
 .option.selected {
@@ -385,6 +559,7 @@ a {
     display: grid;
     gap: 2rem;
     grid-template-columns: minmax(0, 0.55fr) minmax(0, 0.45fr);
+    align-items: start;
 }
 
 .results-overview {
@@ -448,9 +623,6 @@ a {
 .explanations {
     display: grid;
     gap: 1rem;
-    max-height: 600px;
-    overflow-y: auto;
-    padding-right: 0.25rem;
 }
 
 .explanation-card {
@@ -522,16 +694,16 @@ a {
 
 .correct-badge {
     background-color: rgba(16, 185, 129, 0.18);
-    color: #047857;
+    color: #065f46;
 }
 
 .user-badge {
-    background-color: rgba(74, 108, 247, 0.16);
-    color: var(--primary);
+    background-color: rgba(63, 95, 224, 0.16);
+    color: var(--primary-dark);
 }
 
 .answer-note {
-    color: var(--danger);
+    color: var(--danger-text);
     font-weight: 600;
 }
 
@@ -562,6 +734,32 @@ canvas {
     height: auto !important;
 }
 
+#chart-data table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+#chart-data caption {
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+#chart-data th,
+#chart-data td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+#chart-data thead th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
 @media (max-width: 960px) {
     .results-grid {
         grid-template-columns: 1fr;
@@ -578,6 +776,11 @@ canvas {
     }
 
     .question-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-item {
         flex-direction: column;
         align-items: flex-start;
     }
@@ -623,6 +826,7 @@ canvas {
     .app-footer,
     #welcome-screen,
     #quiz-screen,
+    #review-screen,
     .results-actions {
         display: none !important;
     }
@@ -638,7 +842,38 @@ canvas {
         padding: 0;
     }
 
+    .results-grid {
+        display: block;
+    }
+
+    .results-overview {
+        margin-bottom: 1.5rem;
+    }
+
+    .explanations {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+    }
+
+    .explanation-card,
+    .score-item,
+    .panel {
+        break-inside: avoid;
+    }
+
     canvas {
         page-break-inside: avoid;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

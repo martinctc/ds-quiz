@@ -9,6 +9,8 @@
     <script defer src="app.js"></script>
 </head>
 <body>
+    <a class="skip-link" href="#app">Skip to main content</a>
+
     <header class="app-header">
         <div class="branding">
             <h1>Data Science Knowledge Assessment</h1>
@@ -16,10 +18,10 @@
         </div>
     </header>
 
-    <main id="app" class="app-main">
-        <section id="welcome-screen" class="view">
+    <main id="app" class="app-main" tabindex="-1">
+        <section id="welcome-screen" class="view" aria-labelledby="welcome-heading">
             <div class="card">
-                <h2>Welcome!</h2>
+                <h2 id="welcome-heading" tabindex="-1">Welcome!</h2>
                 <p>
                     This assessment covers statistics, machine learning, programming, data manipulation,
                     mathematics, domain knowledge, data engineering, data visualization, and ethics and
@@ -29,68 +31,99 @@
                     This is a self-assessment for learning and practice. It is not a certification or a
                     substitute for professional evaluation.
                 </p>
-                <div id="length-selector" class="length-selector" aria-label="Assessment length"></div>
+                <fieldset class="length-fieldset">
+                    <legend>Assessment length</legend>
+                    <div id="length-selector" class="length-selector"></div>
+                </fieldset>
                 <div class="config-summary" id="config-summary"></div>
-                <button id="start-btn" class="primary-btn">Start Assessment</button>
+                <button id="start-btn" class="primary-btn" type="button">Start Assessment</button>
+
+                <section id="history-section" class="history-section hidden" aria-labelledby="history-heading">
+                    <div class="history-header">
+                        <h3 id="history-heading">Your recent attempts</h3>
+                        <button id="clear-history-btn" class="secondary-btn" type="button">Clear history</button>
+                    </div>
+                    <p id="history-summary" class="history-summary"></p>
+                    <div class="history-table-wrapper">
+                        <table class="history-table">
+                            <caption class="sr-only">Attempts saved in this browser</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Completed</th>
+                                    <th scope="col">Length</th>
+                                    <th scope="col">Score</th>
+                                    <th scope="col">Result</th>
+                                    <th scope="col">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body"></tbody>
+                        </table>
+                    </div>
+                    <p class="history-note">Attempt history is stored only in this browser. Nothing is uploaded.</p>
+                </section>
             </div>
         </section>
 
-        <section id="quiz-screen" class="view hidden" aria-live="polite">
+        <section id="quiz-screen" class="view hidden" aria-labelledby="quiz-heading">
             <div class="card">
+                <h2 id="quiz-heading" class="sr-only" tabindex="-1">Assessment questions</h2>
                 <header class="quiz-header">
                     <div class="progress-wrapper">
                         <span id="progress-text">Question 1</span>
-                        <div class="progress-bar">
+                        <div id="progress-bar" class="progress-bar" role="progressbar" aria-label="Assessment progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                             <div id="progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <div id="timer" class="timer" aria-hidden="true"></div>
+                    <div id="timer" class="timer" role="timer" aria-label="Time remaining" aria-hidden="true"></div>
                 </header>
 
                 <div id="question-container" class="question-container"></div>
 
                 <footer class="quiz-controls">
-                    <button id="prev-btn" class="secondary-btn">Previous</button>
-                    <button id="next-btn" class="secondary-btn">Next</button>
-                    <button id="review-btn" class="secondary-btn">Review Answers</button>
-                    <button id="submit-btn" class="primary-btn">Submit</button>
+                    <button id="prev-btn" class="secondary-btn" type="button">Previous</button>
+                    <button id="next-btn" class="secondary-btn" type="button">Next</button>
+                    <button id="review-btn" class="secondary-btn" type="button">Review Answers</button>
+                    <button id="submit-btn" class="primary-btn" type="button">Submit</button>
                 </footer>
             </div>
         </section>
 
-        <section id="review-screen" class="view hidden">
+        <section id="review-screen" class="view hidden" aria-labelledby="review-heading">
             <div class="card">
-                <h2>Review Your Answers</h2>
+                <h2 id="review-heading" tabindex="-1">Review Your Answers</h2>
                 <p>Double-check your selections before submitting.</p>
                 <div id="review-list" class="review-list"></div>
                 <div class="review-actions">
-                    <button id="edit-answers-btn" class="secondary-btn">Back to Questions</button>
-                    <button id="final-submit-btn" class="primary-btn">Submit Assessment</button>
+                    <button id="edit-answers-btn" class="secondary-btn" type="button">Back to Questions</button>
+                    <button id="final-submit-btn" class="primary-btn" type="button">Submit Assessment</button>
                 </div>
             </div>
         </section>
 
-        <section id="results-screen" class="view hidden">
+        <section id="results-screen" class="view hidden" aria-labelledby="results-heading">
             <div class="card">
                 <header class="results-header">
-                    <h2>Your Results</h2>
+                    <h2 id="results-heading" tabindex="-1">Your Results</h2>
                     <p id="result-summary"></p>
                 </header>
                 <div class="results-grid">
                     <div class="results-overview">
-                        <canvas id="category-chart" aria-label="Score by category" role="img"></canvas>
+                        <canvas id="category-chart" aria-label="Bar chart of score by category" aria-describedby="chart-data" role="img"></canvas>
+                        <div id="chart-data" class="sr-only"></div>
                         <div class="score-breakdown" id="score-breakdown"></div>
                         <div class="strengths-weaknesses" id="strengths-weaknesses"></div>
                     </div>
                     <div class="explanations" id="explanations"></div>
                 </div>
                 <div class="results-actions">
-                    <button id="retry-btn" class="secondary-btn">Retake Assessment</button>
-                    <button id="print-btn" class="primary-btn">Download / Print Results</button>
+                    <button id="retry-btn" class="secondary-btn" type="button">Retake Assessment</button>
+                    <button id="print-btn" class="primary-btn" type="button">Download / Print Results</button>
                 </div>
             </div>
         </section>
     </main>
+
+    <div id="sr-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <footer class="app-footer">
         <p>Built with vanilla HTML, CSS, and JavaScript.</p>

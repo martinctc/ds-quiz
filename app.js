@@ -1,5 +1,9 @@
 'use strict';
 
+const HISTORY_STORAGE_KEY = 'ds-quiz:attempts:v1';
+const DEFAULT_HISTORY_LIMIT = 20;
+const TIMER_WARNING_SECONDS = [300, 60];
+
 const state = {
     config: null,
     selectedPreset: null,
@@ -12,7 +16,12 @@ const state = {
     remainingSeconds: 0,
     chart: null,
     isComplete: false,
-    autoSubmitted: false
+    autoSubmitted: false,
+    startedAt: null,
+    timerWarningsShown: new Set(),
+    history: [],
+    historyAvailable: true,
+    announceTimeout: null
 };
 
 const dom = {};
@@ -28,6 +37,10 @@ function cacheDom() {
     dom.quizScreen = document.getElementById('quiz-screen');
     dom.reviewScreen = document.getElementById('review-screen');
     dom.resultsScreen = document.getElementById('results-screen');
+    dom.welcomeHeading = document.getElementById('welcome-heading');
+    dom.quizHeading = document.getElementById('quiz-heading');
+    dom.reviewHeading = document.getElementById('review-heading');
+    dom.resultsHeading = document.getElementById('results-heading');
     dom.configSummary = document.getElementById('config-summary');
     dom.lengthSelector = document.getElementById('length-selector');
     dom.startBtn = document.getElementById('start-btn');
@@ -41,6 +54,7 @@ function cacheDom() {
     dom.printBtn = document.getElementById('print-btn');
     dom.questionContainer = document.getElementById('question-container');
     dom.progressText = document.getElementById('progress-text');
+    dom.progressBar = document.getElementById('progress-bar');
     dom.progressFill = document.getElementById('progress-fill');
     dom.reviewList = document.getElementById('review-list');
     dom.resultSummary = document.getElementById('result-summary');
@@ -49,6 +63,12 @@ function cacheDom() {
     dom.explanations = document.getElementById('explanations');
     dom.timer = document.getElementById('timer');
     dom.categoryChart = document.getElementById('category-chart');
+    dom.chartData = document.getElementById('chart-data');
+    dom.historySection = document.getElementById('history-section');
+    dom.historySummary = document.getElementById('history-summary');
+    dom.historyBody = document.getElementById('history-body');
+    dom.clearHistoryBtn = document.getElementById('clear-history-btn');
+    dom.announcer = document.getElementById('sr-announcer');
 }
 
 function attachEventListeners() {
@@ -68,6 +88,7 @@ function attachEventListeners() {
     dom.editAnswersBtn?.addEventListener('click', returnToQuestions);
     dom.retryBtn?.addEventListener('click', resetAssessment);
     dom.printBtn?.addEventListener('click', () => window.print());
+    dom.clearHistoryBtn?.addEventListener('click', clearHistory);
 
     dom.questionContainer?.addEventListener('change', handleAnswerChange);
     dom.reviewList?.addEventListener('click', handleReviewNavigation);
@@ -89,8 +110,10 @@ async function initializeApp() {
         state.config = config;
         state.questions = questions;
         state.selectedPreset = config.defaultPreset || (config.presets ? Object.keys(config.presets)[0] : null);
+        loadHistory();
         renderLengthSelector();
         renderConfigSummary();
+        renderHistory();
         configureUiFromSettings();
     } catch (error) {
         console.error('Failed to initialize application', error);
@@ -196,9 +219,18 @@ function handleLengthChange(event) {
 
     state.selectedPreset = input.value;
     state.activeQuestionCounts = null;
-    renderLengthSelector();
+    updateLengthSelectionStyles();
     renderConfigSummary();
     configureUiFromSettings();
+}
+
+function updateLengthSelectionStyles() {
+    if (!dom.lengthSelector) return;
+
+    dom.lengthSelector.querySelectorAll('.length-option').forEach(label => {
+        const input = label.querySelector('input[name="length-preset"]');
+        label.classList.toggle('selected', input?.value === state.selectedPreset);
+    });
 }
 
 function renderConfigSummary() {
@@ -230,7 +262,9 @@ function renderConfigSummary() {
 function configureUiFromSettings() {
     if (!state.config) return;
     dom.reviewBtn?.classList.toggle('hidden', !state.config.allowReview);
-    dom.reviewScreen?.classList.toggle('hidden', !state.config.allowReview);
+    if (!state.config.allowReview) {
+        dom.reviewScreen?.classList.add('hidden');
+    }
     dom.submitBtn.textContent = state.config.allowReview ? 'Submit' : 'Submit Assessment';
     dom.timer.textContent = '';
     dom.timer.setAttribute('aria-hidden', 'true');
@@ -250,12 +284,16 @@ function startAssessment() {
     state.currentIndex = 0;
     state.isComplete = false;
     state.autoSubmitted = false;
+    state.startedAt = Date.now();
+    state.timerWarningsShown = new Set();
 
     switchView('quiz');
     renderQuestions();
     updateNavigationState();
     updateProgress();
     startTimer();
+    focusCurrentQuestion();
+    announce('Assessment started. Question 1 of ' + state.selectedQuestions.length + '.');
 }
 
 function prepareSelectedQuestions() {
@@ -321,32 +359,33 @@ function renderQuestions() {
 
 function createQuestionMarkup(question, index) {
     const selectedIndex = state.answers.has(question.id) ? state.answers.get(question.id) : null;
+    const questionTextId = `question-text-${question.id}`;
     const optionsMarkup = question.options
         .map((optionText, optionIndex) => {
             const inputId = `${question.id}-${optionIndex}`;
             const isSelected = selectedIndex === optionIndex;
             return `
-                <div class="option${isSelected ? ' selected' : ''}" data-question-id="${question.id}" data-option-index="${optionIndex}">
+                <label class="option${isSelected ? ' selected' : ''}" data-question-id="${question.id}" data-option-index="${optionIndex}">
                     <input type="radio" id="${inputId}" name="${question.id}" value="${optionIndex}" ${isSelected ? 'checked' : ''} />
-                    <label for="${inputId}">${optionText}</label>
-                </div>
+                    <span>${optionText}</span>
+                </label>
             `;
         })
         .join('');
 
     return `
-        <article class="question-card" data-question-id="${question.id}" data-index="${index}">
+        <article class="question-card" data-question-id="${question.id}" data-index="${index}" aria-labelledby="${questionTextId}">
             <header class="question-header">
                 <div>
                     <p class="question-number">Question ${index + 1}</p>
-                    <p class="question-text">${question.question}</p>
+                    <p class="question-text" id="${questionTextId}" tabindex="-1">${question.question}</p>
                 </div>
                 <div class="question-meta">
                     <span class="badge category">${formatCategory(question.category)}</span>
                     <span class="badge difficulty ${question.difficulty}">${formatDifficulty(question.difficulty)}</span>
                 </div>
             </header>
-            <div class="option-list">
+            <div class="option-list" role="radiogroup" aria-labelledby="${questionTextId}">
                 ${optionsMarkup}
             </div>
         </article>
@@ -361,13 +400,7 @@ function handleAnswerChange(event) {
     const selectedOption = Number(input.value);
 
     state.answers.set(questionId, selectedOption);
-
-    if (state.config.displayMode === 'all-at-once') {
-        highlightSelectedOption(questionId);
-    } else {
-        renderQuestions();
-    }
-
+    highlightSelectedOption(questionId);
     updateProgress();
 }
 
@@ -393,6 +426,7 @@ function navigateQuestion(direction) {
     renderQuestions();
     updateNavigationState();
     updateProgress();
+    focusCurrentQuestion();
 }
 
 function updateNavigationState() {
@@ -418,6 +452,8 @@ function showReview() {
 
     renderReviewList();
     switchView('review');
+    focusElement(dom.reviewHeading);
+    announce('Review your answers. ' + state.answers.size + ' of ' + state.selectedQuestions.length + ' questions answered.');
 }
 
 function renderReviewList() {
@@ -453,10 +489,12 @@ function handleReviewNavigation(event) {
     renderQuestions();
     updateNavigationState();
     updateProgress();
+    focusCurrentQuestion();
 }
 
 function returnToQuestions() {
     switchView('quiz');
+    focusCurrentQuestion();
 }
 
 function finalizeAssessment(autoSubmitted = false) {
@@ -467,8 +505,14 @@ function finalizeAssessment(autoSubmitted = false) {
     stopTimer();
 
     const results = computeResults();
+    recordAttempt(results);
     renderResults(results);
     switchView('results');
+    focusElement(dom.resultsHeading);
+    const autoNote = results.autoSubmitted
+        ? ' Time expired, so your answers were submitted automatically.'
+        : '';
+    announce(`Assessment complete. You scored ${results.percentage} percent.${autoNote}`);
 }
 
 function computeResults() {
@@ -498,23 +542,48 @@ function computeResults() {
         percentage: stats.total ? Math.round((stats.correct / stats.total) * 100) : 0
     }));
 
+    const preset = getActivePreset();
+    const elapsedSeconds = state.startedAt
+        ? Math.max(0, Math.round((Date.now() - state.startedAt) / 1000))
+        : 0;
+
     return {
         total,
         correct: correctCount,
         percentage,
-        categoryBreakdown
+        categoryBreakdown,
+        passed: percentage >= state.config.passingScore,
+        presetKey: state.selectedPreset,
+        presetLabel: preset?.label || 'Assessment',
+        elapsedSeconds,
+        autoSubmitted: state.autoSubmitted
     };
 }
 
 function renderResults(results) {
-    const passed = results.percentage >= state.config.passingScore;
+    const passed = results.passed;
     const timeNote = state.autoSubmitted ? ' (submitted automatically when time expired)' : '';
+    const previous = state.config.showHistory !== false ? state.history[1] : null;
 
-    dom.resultSummary.textContent = `You scored ${results.percentage}% (${results.correct}/${results.total})${timeNote}. ${passed ? 'You passed!' : 'Keep practicing and try again.'}`;
+    const parts = [
+        `You scored ${results.percentage}% (${results.correct}/${results.total})${timeNote}.`,
+        passed ? 'You passed!' : 'Keep practicing and try again.'
+    ];
+
+    if (results.elapsedSeconds) {
+        parts.push(`Time taken: ${formatDuration(results.elapsedSeconds)}.`);
+    }
+
+    if (previous) {
+        parts.push(`Previous attempt: ${previous.percentage}% (${formatDelta(results.percentage - previous.percentage)}).`);
+    }
+
+    dom.resultSummary.textContent = parts.join(' ');
 
     renderScoreBreakdown(results.categoryBreakdown);
     renderStrengthsAndWeaknesses(results.categoryBreakdown);
     renderExplanations();
+    renderChartData(results.categoryBreakdown);
     renderCategoryChart(results.categoryBreakdown);
 }
 
@@ -609,10 +678,46 @@ function renderExplanations() {
     dom.explanations.innerHTML = cards.join('');
 }
 
+function renderChartData(breakdown) {
+    if (!dom.chartData) return;
+
+    const rows = breakdown.map(item => `
+        <tr>
+            <th scope="row">${formatCategory(item.category)}</th>
+            <td>${item.correct}</td>
+            <td>${item.total}</td>
+            <td>${item.percentage}%</td>
+        </tr>
+    `).join('');
+
+    dom.chartData.innerHTML = `
+        <table>
+            <caption>Score by category</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Correct</th>
+                    <th scope="col">Questions</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+        </table>
+    `;
+}
+
 function renderCategoryChart(breakdown) {
     if (!dom.categoryChart) return;
 
     const ctx = dom.categoryChart.getContext('2d');
+    if (typeof Chart === 'undefined' || !ctx) {
+        dom.categoryChart.classList.add('hidden');
+        dom.chartData?.classList.remove('sr-only');
+        return;
+    }
+
+    dom.categoryChart.classList.remove('hidden');
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
     if (state.chart) {
         state.chart.destroy();
@@ -626,19 +731,26 @@ function renderCategoryChart(breakdown) {
                 {
                     label: 'Score (%)',
                     data: breakdown.map(item => item.percentage),
-                    backgroundColor: 'rgba(74, 108, 247, 0.7)',
+                    backgroundColor: 'rgba(63, 95, 224, 0.7)',
                     borderRadius: 8
                 }
             ]
         },
         options: {
+            indexAxis: 'y',
             responsive: true,
+            animation: reduceMotion ? false : undefined,
             scales: {
-                y: {
+                x: {
                     beginAtZero: true,
                     max: 100,
                     ticks: {
                         callback: value => `${value}%`
+                    }
+                },
+                y: {
+                    ticks: {
+                        autoSkip: false
                     }
                 }
             },
@@ -663,6 +775,11 @@ function updateProgress() {
 
     const percentage = Math.round((answered / total) * 100);
     dom.progressFill.style.width = `${percentage}%`;
+
+    if (dom.progressBar) {
+        dom.progressBar.setAttribute('aria-valuenow', String(percentage));
+        dom.progressBar.setAttribute('aria-valuetext', `${answered} of ${total} questions answered`);
+    }
 }
 
 function startTimer() {
@@ -677,17 +794,31 @@ function startTimer() {
 
     state.remainingSeconds = timeLimit * 60;
     dom.timer.setAttribute('aria-hidden', 'false');
-    dom.timer.textContent = formatTime(state.remainingSeconds);
+    updateTimerDisplay();
 
     state.timerInterval = window.setInterval(() => {
         state.remainingSeconds -= 1;
-        dom.timer.textContent = formatTime(Math.max(state.remainingSeconds, 0));
+        updateTimerDisplay();
 
         if (state.remainingSeconds <= 0) {
             stopTimer();
             finalizeAssessment(true);
         }
     }, 1000);
+}
+
+function updateTimerDisplay() {
+    const seconds = Math.max(state.remainingSeconds, 0);
+    dom.timer.textContent = formatTime(seconds);
+    dom.timer.classList.toggle('warning', seconds <= 60);
+
+    TIMER_WARNING_SECONDS.forEach(threshold => {
+        if (seconds <= threshold && !state.timerWarningsShown.has(threshold)) {
+            state.timerWarningsShown.add(threshold);
+            const minutes = Math.round(threshold / 60);
+            announce(`${minutes} minute${minutes === 1 ? '' : 's'} remaining.`);
+        }
+    });
 }
 
 function stopTimer() {
@@ -704,15 +835,23 @@ function resetAssessment() {
     state.currentIndex = 0;
     state.isComplete = false;
     state.autoSubmitted = false;
+    state.startedAt = null;
+    state.timerWarningsShown = new Set();
 
     dom.questionContainer.innerHTML = '';
     dom.reviewList.innerHTML = '';
     dom.scoreBreakdown.innerHTML = '';
     dom.strengthsWeaknesses.innerHTML = '';
     dom.explanations.innerHTML = '';
+    dom.chartData.innerHTML = '';
+    dom.chartData.classList.add('sr-only');
+    dom.categoryChart.classList.remove('hidden');
     dom.progressText.textContent = '';
     dom.progressFill.style.width = '0%';
+    dom.progressBar?.setAttribute('aria-valuenow', '0');
+    dom.progressBar?.setAttribute('aria-valuetext', '0 of 0 questions answered');
     dom.timer.textContent = '';
+    dom.timer.classList.remove('warning');
     dom.timer.setAttribute('aria-hidden', 'true');
 
     if (state.chart) {
@@ -723,8 +862,11 @@ function resetAssessment() {
     state.activeQuestionCounts = null;
     renderLengthSelector();
     renderConfigSummary();
+    renderHistory();
     configureUiFromSettings();
     switchView('welcome');
+    focusElement(dom.welcomeHeading);
+    announce('Ready for a new assessment.');
 }
 
 function switchView(view) {
@@ -743,6 +885,213 @@ function switchView(view) {
     if (active) {
         active.classList.remove('hidden');
     }
+}
+
+function focusElement(element) {
+    if (!element || typeof element.focus !== 'function') return;
+    element.focus({ preventScroll: false });
+}
+
+function focusCurrentQuestion() {
+    const card = dom.questionContainer?.querySelector('.question-card');
+    const text = card?.querySelector('.question-text');
+    focusElement(text);
+}
+
+function announce(message) {
+    if (!dom.announcer) return;
+
+    dom.announcer.textContent = '';
+    window.clearTimeout(state.announceTimeout);
+    state.announceTimeout = window.setTimeout(() => {
+        dom.announcer.textContent = message;
+    }, 60);
+}
+
+function getHistoryLimit() {
+    const limit = state.config?.historyLimit;
+    return Number.isInteger(limit) && limit > 0 ? limit : DEFAULT_HISTORY_LIMIT;
+}
+
+function isHistoryEnabled() {
+    return state.config?.showHistory !== false;
+}
+
+function isValidAttempt(attempt) {
+    return Boolean(attempt)
+        && typeof attempt === 'object'
+        && typeof attempt.completedAt === 'string'
+        && Number.isFinite(attempt.percentage)
+        && attempt.percentage >= 0
+        && attempt.percentage <= 100
+        && Number.isInteger(attempt.total)
+        && attempt.total > 0
+        && Number.isInteger(attempt.correct)
+        && attempt.correct >= 0
+        && attempt.correct <= attempt.total;
+}
+
+function loadHistory() {
+    if (!isHistoryEnabled()) {
+        state.history = [];
+        return;
+    }
+
+    try {
+        const raw = window.localStorage.getItem(HISTORY_STORAGE_KEY);
+        if (!raw) {
+            state.history = [];
+            return;
+        }
+
+        const parsed = JSON.parse(raw);
+        state.history = Array.isArray(parsed)
+            ? parsed.filter(isValidAttempt).slice(0, getHistoryLimit())
+            : [];
+    } catch (error) {
+        console.warn('Unable to read attempt history', error);
+        state.historyAvailable = false;
+        state.history = [];
+    }
+}
+
+function persistHistory() {
+    if (!state.historyAvailable) return;
+
+    try {
+        window.localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(state.history));
+    } catch (error) {
+        console.warn('Unable to save attempt history', error);
+        state.historyAvailable = false;
+    }
+}
+
+function recordAttempt(results) {
+    if (!isHistoryEnabled()) return;
+
+    const attempt = {
+        completedAt: new Date().toISOString(),
+        preset: results.presetLabel,
+        presetKey: results.presetKey,
+        total: results.total,
+        correct: results.correct,
+        percentage: results.percentage,
+        passed: Boolean(results.passed),
+        elapsedSeconds: results.elapsedSeconds,
+        autoSubmitted: Boolean(results.autoSubmitted),
+        categoryBreakdown: results.categoryBreakdown.map(item => ({
+            category: item.category,
+            correct: item.correct,
+            total: item.total,
+            percentage: item.percentage
+        }))
+    };
+
+    state.history.unshift(attempt);
+    state.history = state.history.slice(0, getHistoryLimit());
+    persistHistory();
+    renderHistory();
+}
+
+function clearHistory() {
+    if (!state.history.length) return;
+
+    const confirmed = window.confirm('Clear all saved attempts from this browser? This cannot be undone.');
+    if (!confirmed) return;
+
+    state.history = [];
+
+    try {
+        window.localStorage.removeItem(HISTORY_STORAGE_KEY);
+    } catch (error) {
+        console.warn('Unable to clear attempt history', error);
+    }
+
+    renderHistory();
+    focusElement(dom.welcomeHeading);
+    announce('Attempt history cleared.');
+}
+
+function renderHistory() {
+    if (!dom.historySection) return;
+
+    if (!isHistoryEnabled() || state.history.length === 0) {
+        dom.historySection.classList.add('hidden');
+        return;
+    }
+
+    dom.historySection.classList.remove('hidden');
+
+    const attempts = state.history;
+    const best = attempts.reduce((max, attempt) => Math.max(max, attempt.percentage), 0);
+    const latest = attempts[0];
+    const previous = attempts[1];
+    const delta = previous ? latest.percentage - previous.percentage : null;
+
+    const summaryParts = [
+        `${attempts.length} saved attempt${attempts.length === 1 ? '' : 's'}`,
+        `Best ${best}%`,
+        `Latest ${latest.percentage}%`
+    ];
+
+    if (delta !== null) {
+        summaryParts.push(`${formatDelta(delta)} vs previous`);
+    }
+
+    dom.historySummary.textContent = `${summaryParts.join(' · ')}.`;
+
+    dom.historyBody.innerHTML = attempts.map(attempt => {
+        const passed = typeof attempt.passed === 'boolean'
+            ? attempt.passed
+            : attempt.percentage >= (state.config?.passingScore ?? 0);
+
+        return `
+            <tr>
+                <th scope="row">${escapeHtml(formatDate(attempt.completedAt))}</th>
+                <td>${escapeHtml(attempt.preset || 'Assessment')}</td>
+                <td>${attempt.correct}/${attempt.total} (${attempt.percentage}%)</td>
+                <td><span class="result-pill ${passed ? 'pass' : 'fail'}">${passed ? 'Pass' : 'Below target'}</span></td>
+                <td>${escapeHtml(formatDuration(attempt.elapsedSeconds))}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function formatDate(isoString) {
+    const date = new Date(isoString);
+    if (Number.isNaN(date.getTime())) return 'Unknown';
+
+    return date.toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatDuration(totalSeconds) {
+    if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return '—';
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    if (!minutes) return `${seconds}s`;
+    return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+}
+
+function formatDelta(delta) {
+    if (!Number.isFinite(delta) || delta === 0) return 'no change';
+    return `${delta > 0 ? '+' : ''}${delta} points`;
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function formatCategory(categoryKey) {

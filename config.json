@@ -24,5 +24,7 @@
     "passingScore": 75,
     "strengthThreshold": 75,
     "weaknessThreshold": 60,
-    "timeLimitMinutes": 20
+    "timeLimitMinutes": 20,
+    "showHistory": true,
+    "historyLimit": 20
 }

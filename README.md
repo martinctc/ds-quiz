@@ -10,8 +10,9 @@ Single-page assessment tool that helps data professionals measure strengths and 
 - Flexible delivery: present one question at a time or all questions at once, with optional review step before submission.
 - Timer support, progress tracking, and the ability to revisit answers prior to submitting.
 - Detailed post-submission results with overall score, category breakdown, strengths/weaknesses, a bar chart, and per-question explanations that highlight the correct answer and the user's choice.
+- Attempt history saved in the browser with best/latest scores, per-attempt scores, and a clear-history control.
 - Print-friendly layout so participants can download or print their results.
-- Responsive, accessible UI that adapts from desktop to mobile.
+- Keyboard-friendly, screen-reader-friendly UI with focus management, ARIA labelling, an accessible data table for the chart, and reduced-motion support.
 
 ## 🗂 Project Structure
 
@@ -68,6 +69,8 @@ All runtime settings live in `config.json`. Key properties:
 | `strengthThreshold` | number | Categories at or above this % are labeled strengths. |
 | `weaknessThreshold` | number | Categories at or below this % are highlighted as focus areas. |
 | `timeLimitMinutes` | number \| null | Fallback timer used only when a preset omits `timeLimitMinutes`. |
+| `showHistory` | boolean | Enables the browser-local attempt history. Defaults to `true`. |
+| `historyLimit` | number | Maximum number of attempts kept in `localStorage`. Defaults to `20`. |
 
 `questionCounts` is still supported as a legacy fallback when `presets` is absent. When both are present, `presets` takes precedence.
 
@@ -88,9 +91,35 @@ Example:
 	"passingScore": 75,
 	"strengthThreshold": 75,
 	"weaknessThreshold": 60,
-	"timeLimitMinutes": 20
+	"timeLimitMinutes": 20,
+	"showHistory": true,
+	"historyLimit": 20
 }
 ```
+
+## 💾 Attempt History
+
+Completed attempts are saved in the browser's `localStorage` under the key `ds-quiz:attempts:v1`. The welcome screen shows:
+
+- The number of saved attempts, the best score, and the latest score.
+- A table with completion time, assessment length, score, pass/fail, and time taken.
+- A **Clear history** button.
+
+Notes:
+
+- History is per browser and per device. It is never uploaded.
+- Only summary data is stored (score, category percentages, timing). Individual answers are not saved.
+- Set `showHistory` to `false` to disable the feature, and use `historyLimit` to cap how many attempts are retained.
+- If `localStorage` is unavailable (for example, strict private browsing), the assessment still works and history is simply not saved.
+
+## ♿ Accessibility
+
+- Semantic landmarks, a skip link, and labelled sections and headings.
+- Keyboard support for length selection, answer options, navigation, review, and results.
+- Focus moves to the current question or the new screen heading after navigation so screen-reader users are not stranded.
+- Radio groups are labelled by their question text, progress is exposed as a `progressbar`, and the timer announces 5-minute and 1-minute warnings through a polite live region.
+- The results chart has a visually hidden data table as its text alternative.
+- Colour choices target WCAG AA contrast, and motion is reduced when `prefers-reduced-motion` is set.
 
 ## 📝 Adding or Editing Questions (`questions.json`)
 
@@ -150,7 +179,8 @@ The script checks for:
 - Exactly four non-empty `options` per question.
 - `correctAnswer` as an integer between 0 and 3.
 - A non-empty `explanation` and a valid `difficulty` (`easy`, `medium`, `hard`).
-- `questionCounts` that reference real categories and do not exceed the available questions.
+- Presets that reference real categories, fit within the available question counts, and define valid time limits.
+- History settings (`showHistory`, `historyLimit`) when present.
 
 The same check runs automatically on every push to `main` and on pull requests via `.github/workflows/validate.yml`.
 
@@ -172,7 +202,9 @@ Add the chosen license as a `LICENSE` file and link it from this section.
 
 - Update colors or typography in `style.css` by adjusting the CSS variables declared under `:root`.
 - Extend the review or results views by modifying templates inside `app.js` (`createQuestionMarkup`, `renderReviewList`, `renderResults`).
-- To add new categories, create a new key in `questions.json`, add a corresponding entry in `questionCounts`, and optionally style a new badge in CSS.
+- To add new categories, create a new key in `questions.json` and make sure each preset still has enough questions to sample from it.
+- Attempt history uses the `ds-quiz:attempts:v1` `localStorage` key. Change `historyLimit` to control retention, or `showHistory` to disable it.
+- When changing markup, preserve the `aria-labelledby` relationships, the focus targets, and the hidden chart data table so screen-reader support keeps working.
 
 ## 🌐 Deploying to GitHub Pages
 
@@ -192,5 +224,7 @@ No build step is required—`config.json` and `questions.json` are served as sta
 - [x] Loads questions and configuration from external JSON files.
 - [x] Provides review and timer features when enabled.
 - [x] Displays answers, explanations, and category-level insights on completion.
+- [x] Saves attempt summaries in the browser and lets users clear them.
+- [x] Supports keyboard navigation, visible focus, labelled controls, and an accessible chart alternative.
 
 Enjoy tailoring the assessment for your team or learners! 🚀
