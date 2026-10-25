@@ -195,6 +195,16 @@ function validatePresets(cfg, bank) {
     );
   }
 
+  const categories = Object.keys(bank);
+  const totalAvailable = categories.reduce(
+    (sum, category) => sum + (Array.isArray(bank[category]) ? bank[category].length : 0),
+    0
+  );
+  const smallestCategory = categories.reduce((min, category) => {
+    const size = Array.isArray(bank[category]) ? bank[category].length : 0;
+    return Math.min(min, size);
+  }, Infinity);
+
   for (const [key, preset] of entries) {
     const where = `config.json: presets["${key}"]`;
 
@@ -207,24 +217,63 @@ function validatePresets(cfg, bank) {
       errors.push(`${where}.label must be a non-empty string`);
     }
 
-    if (
-      !Number.isInteger(preset.questionsPerCategory) ||
-      preset.questionsPerCategory < 1
-    ) {
-      errors.push(`${where}.questionsPerCategory must be a positive integer`);
-    } else {
-      for (const category of Object.keys(bank)) {
-        const available = Array.isArray(bank[category]) ? bank[category].length : 0;
-        if (preset.questionsPerCategory > available) {
+    const hasTotal = preset.totalQuestions !== undefined;
+    const hasPerCategory = preset.questionsPerCategory !== undefined;
+
+    if (!hasTotal && !hasPerCategory) {
+      errors.push(
+        `${where} must define either "totalQuestions" or "questionsPerCategory"`
+      );
+    }
+
+    if (hasTotal) {
+      if (!Number.isInteger(preset.totalQuestions) || preset.totalQuestions < 1) {
+        errors.push(`${where}.totalQuestions must be a positive integer`);
+      } else if (preset.totalQuestions > totalAvailable) {
+        errors.push(
+          `${where}.totalQuestions (${preset.totalQuestions}) exceeds the total available questions (${totalAvailable})`
+        );
+      } else {
+        const maxPerCategory = Math.ceil(preset.totalQuestions / categories.length);
+        if (maxPerCategory > smallestCategory) {
           errors.push(
-            `${where}.questionsPerCategory (${preset.questionsPerCategory}) exceeds available questions in "${category}" (${available})`
+            `${where}.totalQuestions requires up to ${maxPerCategory} questions per category, but the smallest category has ${smallestCategory}`
           );
-        } else if (preset.questionsPerCategory === available) {
+        }
+        if (preset.totalQuestions < categories.length) {
           warnings.push(
-            `${where}.questionsPerCategory samples every available question in "${category}", so that category is not randomised`
+            `${where}.totalQuestions is smaller than the number of categories (${categories.length}); some categories will be skipped`
           );
         }
       }
+    }
+
+    if (hasPerCategory) {
+      if (
+        !Number.isInteger(preset.questionsPerCategory) ||
+        preset.questionsPerCategory < 1
+      ) {
+        errors.push(`${where}.questionsPerCategory must be a positive integer`);
+      } else {
+        for (const category of categories) {
+          const available = Array.isArray(bank[category]) ? bank[category].length : 0;
+          if (preset.questionsPerCategory > available) {
+            errors.push(
+              `${where}.questionsPerCategory (${preset.questionsPerCategory}) exceeds available questions in "${category}" (${available})`
+            );
+          } else if (preset.questionsPerCategory === available) {
+            warnings.push(
+              `${where}.questionsPerCategory samples every available question in "${category}", so that category is not randomised`
+            );
+          }
+        }
+      }
+    }
+
+    if (hasTotal && hasPerCategory) {
+      warnings.push(
+        `${where} defines both totalQuestions and questionsPerCategory; totalQuestions takes precedence`
+      );
     }
 
     if (preset.timeLimitMinutes !== undefined && preset.timeLimitMinutes !== null) {

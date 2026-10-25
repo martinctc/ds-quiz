@@ -2,18 +2,18 @@
     "presets": {
         "quick": {
             "label": "Quick",
-            "questionsPerCategory": 2,
-            "timeLimitMinutes": 20
+            "totalQuestions": 10,
+            "timeLimitMinutes": 10
         },
         "standard": {
             "label": "Standard",
-            "questionsPerCategory": 3,
-            "timeLimitMinutes": 30
+            "totalQuestions": 20,
+            "timeLimitMinutes": 20
         },
         "full": {
             "label": "Full",
-            "questionsPerCategory": 4,
-            "timeLimitMinutes": 40
+            "totalQuestions": 30,
+            "timeLimitMinutes": 30
         }
     },
     "defaultPreset": "standard",
@@ -24,5 +24,5 @@
     "passingScore": 75,
     "strengthThreshold": 75,
     "weaknessThreshold": 60,
-    "timeLimitMinutes": 30
+    "timeLimitMinutes": 20
 }

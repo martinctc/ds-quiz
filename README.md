@@ -58,7 +58,7 @@ All runtime settings live in `config.json`. Key properties:
 
 | Key | Type | Description |
 | --- | --- | --- |
-| `presets` | object | Named assessment lengths. Each preset defines `label`, `questionsPerCategory`, and optional `timeLimitMinutes`. |
+| `presets` | object | Named assessment lengths. Each preset defines `label`, `totalQuestions`, and optional `timeLimitMinutes`. Questions are distributed as evenly as possible across categories. |
 | `defaultPreset` | string | Key of the preset selected by default (e.g. `"standard"`). |
 | `displayMode` | string | `"one-at-a-time"` (default) or `"all-at-once"`. |
 | `allowReview` | boolean | Enables the dedicated review screen before final submission. |
@@ -76,9 +76,9 @@ Example:
 ```json
 {
 	"presets": {
-		"quick": { "label": "Quick", "questionsPerCategory": 2, "timeLimitMinutes": 20 },
-		"standard": { "label": "Standard", "questionsPerCategory": 3, "timeLimitMinutes": 30 },
-		"full": { "label": "Full", "questionsPerCategory": 4, "timeLimitMinutes": 40 }
+		"quick": { "label": "Quick", "totalQuestions": 10, "timeLimitMinutes": 10 },
+		"standard": { "label": "Standard", "totalQuestions": 20, "timeLimitMinutes": 20 },
+		"full": { "label": "Full", "totalQuestions": 30, "timeLimitMinutes": 30 }
 	},
 	"defaultPreset": "standard",
 	"displayMode": "one-at-a-time",
@@ -88,7 +88,7 @@ Example:
 	"passingScore": 75,
 	"strengthThreshold": 75,
 	"weaknessThreshold": 60,
-	"timeLimitMinutes": 30
+	"timeLimitMinutes": 20
 }
 ```
 

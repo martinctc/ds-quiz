@@ -3,6 +3,7 @@
 const state = {
     config: null,
     selectedPreset: null,
+    activeQuestionCounts: null,
     questions: {},
     selectedQuestions: [],
     currentIndex: 0,
@@ -107,16 +108,47 @@ function getActivePreset() {
         || null;
 }
 
-function buildQuestionCounts() {
-    const preset = getActivePreset();
-    if (!preset) {
-        return state.config?.questionCounts || {};
-    }
+function distributeQuestionCounts(totalQuestions, categories) {
+    if (!categories.length) return {};
+
+    const base = Math.floor(totalQuestions / categories.length);
+    const remainder = totalQuestions % categories.length;
+    const shuffled = [...categories];
+    shuffleArray(shuffled);
 
     const counts = {};
-    Object.keys(state.questions || {}).forEach(category => {
-        counts[category] = preset.questionsPerCategory;
+    shuffled.forEach((category, index) => {
+        counts[category] = base + (index < remainder ? 1 : 0);
     });
+
+    const ordered = {};
+    categories.forEach(category => {
+        ordered[category] = counts[category];
+    });
+    return ordered;
+}
+
+function buildQuestionCounts() {
+    if (state.activeQuestionCounts) {
+        return state.activeQuestionCounts;
+    }
+
+    const preset = getActivePreset();
+    const categories = Object.keys(state.questions || {});
+    let counts;
+
+    if (!preset) {
+        counts = state.config?.questionCounts || {};
+    } else if (Number.isInteger(preset.totalQuestions)) {
+        counts = distributeQuestionCounts(preset.totalQuestions, categories);
+    } else {
+        counts = {};
+        categories.forEach(category => {
+            counts[category] = preset.questionsPerCategory;
+        });
+    }
+
+    state.activeQuestionCounts = counts;
     return counts;
 }
 
@@ -142,7 +174,9 @@ function renderLengthSelector() {
 
     dom.lengthSelector.innerHTML = Object.entries(presets).map(([key, preset]) => {
         const isSelected = key === state.selectedPreset;
-        const total = preset.questionsPerCategory * categoryCount;
+        const total = Number.isInteger(preset.totalQuestions)
+            ? preset.totalQuestions
+            : preset.questionsPerCategory * categoryCount;
         const timeLabel = preset.timeLimitMinutes ? ` · ~${preset.timeLimitMinutes} min` : '';
         return `
             <label class="length-option${isSelected ? ' selected' : ''}">
@@ -161,6 +195,7 @@ function handleLengthChange(event) {
     if (!input) return;
 
     state.selectedPreset = input.value;
+    state.activeQuestionCounts = null;
     renderLengthSelector();
     renderConfigSummary();
     configureUiFromSettings();
@@ -685,6 +720,7 @@ function resetAssessment() {
         state.chart = null;
     }
 
+    state.activeQuestionCounts = null;
     renderLengthSelector();
     renderConfigSummary();
     configureUiFromSettings();
