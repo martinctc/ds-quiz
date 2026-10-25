@@ -39,31 +39,30 @@
                 <button id="start-btn" class="primary-btn" type="button">Start Assessment</button>
 
                 <section id="history-section" class="history-section hidden" aria-labelledby="history-heading">
-                    <div class="history-header">
+                    <div class="history-heading-row">
                         <h3 id="history-heading">Your recent attempts</h3>
                         <button id="clear-history-btn" class="secondary-btn" type="button">Clear history</button>
                     </div>
                     <p id="history-summary" class="history-summary"></p>
-
-<details class="history-expand">
-    <summary>Show detailed history</summary>
-    <div class="history-table-container"></div>
-</details>
-                    <div class="history-table-wrapper">
-                        <table class="history-table">
-                            <caption class="sr-only">Attempts saved in this browser</caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">Completed</th>
-                                    <th scope="col">Length</th>
-                                    <th scope="col">Score</th>
-                                    <th scope="col">Result</th>
-                                    <th scope="col">Time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="history-body"></tbody>
-                        </table>
-                    </div>
+                    <div id="history-stats" class="history-stats" aria-hidden="true"></div>
+                    <details id="history-details" class="history-details">
+                        <summary id="history-details-summary">Show detailed history</summary>
+                        <div class="history-table-wrapper">
+                            <table class="history-table">
+                                <caption class="sr-only">Attempts saved in this browser</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Completed</th>
+                                        <th scope="col">Length</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col">Result</th>
+                                        <th scope="col">Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body"></tbody>
+                            </table>
+                        </div>
+                    </details>
                     <p class="history-note">Attempt history is stored only in this browser. Nothing is uploaded.</p>
                 </section>
             </div>
@@ -135,30 +134,57 @@
     </footer>
 
     <!-- Admin panel (shown when ?admin=1) -->
-    <aside id="admin-panel" class="admin-panel" aria-hidden="true">
-        <h3>Admin Tools</h3>
-        <p>Current preset: <span id="admin-preset"></span></p>
-        <section>
-            <h4>Add a question</h4>
-            <form id="add-question-form">
-                <input name="question" placeholder="Question text" required />
-                <div>
-                    <label><input type="radio" name="optA" required /> A</label>
-                    <label><input type="radio" name="optB" /> B</label>
-                    <label><input type="radio" name="optC" /> C</label>
-                    <label><input type="radio" name="optD" /> D</label>
-                </div>
-                <input name="correctAnswer" type="number" min="0" max="3" placeholder="Correct option (0‑3)" required />
-                <input name="explanation" placeholder="Why is this correct?" required />
-                <input name="category" placeholder="Category (e.g. statistics)" required />
-                <button type="submit">Add to current bank</button>
+    <aside id="admin-panel" class="admin-panel" aria-labelledby="admin-heading" aria-hidden="true" hidden>
+        <header class="admin-header">
+            <h2 id="admin-heading">Question bank admin</h2>
+            <button id="admin-close" class="secondary-btn admin-close" type="button">Close</button>
+        </header>
+
+        <p class="admin-note">
+            Custom questions are saved in this browser only. <code>questions.json</code> is never modified.
+        </p>
+        <p class="admin-meta">Active preset: <strong id="admin-preset">none</strong></p>
+
+        <section class="admin-section">
+            <h3>Add a question</h3>
+            <form id="add-question-form" class="admin-form">
+                <label for="admin-question">Question</label>
+                <textarea id="admin-question" name="question" rows="2" required></textarea>
+
+                <fieldset class="admin-options-fieldset">
+                    <legend>Options (select the radio for the correct answer)</legend>
+                    <div id="admin-options"></div>
+                </fieldset>
+
+                <label for="admin-explanation">Explanation</label>
+                <textarea id="admin-explanation" name="explanation" rows="2" required></textarea>
+
+                <label for="admin-category">Category</label>
+                <select id="admin-category" name="category" required></select>
+
+                <label for="admin-difficulty">Difficulty</label>
+                <select id="admin-difficulty" name="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+
+                <button type="submit" class="primary-btn admin-submit">Add question</button>
             </form>
         </section>
-        <section>
-            <h4>Current question bank summary</h4>
-            <pre id="bank-summary"></pre>
+
+        <section class="admin-section">
+            <div class="admin-section-header">
+                <h3>Custom questions</h3>
+                <button id="admin-clear" class="secondary-btn" type="button" disabled>Remove all</button>
+            </div>
+            <div id="admin-list"></div>
         </section>
-        <button id="admin-close" aria-label="Close admin panel">Close</button>
+
+        <section class="admin-section">
+            <h3>Questions per category</h3>
+            <div id="admin-counts"></div>
+        </section>
     </aside>
 </body>
 </html>

@@ -10,7 +10,9 @@ Single-page assessment tool that helps data professionals measure strengths and 
 - Flexible delivery: present one question at a time or all questions at once, with optional review step before submission.
 - Timer support, progress tracking, and the ability to revisit answers prior to submitting.
 - Detailed post-submission results with overall score, category breakdown, strengths/weaknesses, a bar chart, and per-question explanations that highlight the correct answer and the user's choice.
-- Attempt history saved in the browser with best/latest scores, per-attempt scores, and a clear-history control.
+- Attempt history saved in the browser with a best/latest/change summary card, an expandable per-attempt table, and a clear-history control.
+- Touch-friendly controls plus swipe navigation (left for next, right for previous) in one-question-at-a-time mode.
+- Optional in-browser question-bank admin panel (`?admin=1`) for prototyping new questions without editing JSON.
 - Print-friendly layout so participants can download or print their results.
 - Keyboard-friendly, screen-reader-friendly UI with focus management, ARIA labelling, an accessible data table for the chart, and reduced-motion support.
 
@@ -101,8 +103,8 @@ Example:
 
 Completed attempts are saved in the browser's `localStorage` under the key `ds-quiz:attempts:v1`. The welcome screen shows:
 
-- The number of saved attempts, the best score, and the latest score.
-- A table with completion time, assessment length, score, pass/fail, and time taken.
+- A summary line plus four stat cards: attempts, best score, latest score, and the change since the previous attempt.
+- A collapsible **Show details** table with completion time, assessment length, score, pass/fail, and time taken.
 - A **Clear history** button.
 
 Notes:
@@ -112,6 +114,21 @@ Notes:
 - Set `showHistory` to `false` to disable the feature, and use `historyLimit` to cap how many attempts are retained.
 - If `localStorage` is unavailable (for example, strict private browsing), the assessment still works and history is simply not saved.
 
+## 🛠 Question Bank Admin Panel (`?admin=1`)
+
+Append `?admin=1` to the site URL to open a side panel for prototyping questions:
+
+- Add a question with four options, a correct answer, an explanation, a category, and a difficulty.
+- Added questions are written to `localStorage` under `ds-quiz:admin-questions:v1`, merged into the in-memory bank for future attempts, and included in category counts.
+- See every custom question and the current per-category totals, then remove all custom questions with one click.
+- Close the panel with the **Close** button or the <kbd>Esc</kbd> key.
+
+Notes:
+
+- `questions.json` is never modified; refreshing the page cannot lose shipped questions.
+- Custom questions are per browser and per device. To make a question permanent, add it to `questions.json` and run `node scripts/validate-questions.mjs`.
+- The panel is hidden on normal page loads and is excluded from the printed results.
+
 ## ♿ Accessibility
 
 - Semantic landmarks, a skip link, and labelled sections and headings.
@@ -119,7 +136,15 @@ Notes:
 - Focus moves to the current question or the new screen heading after navigation so screen-reader users are not stranded.
 - Radio groups are labelled by their question text, progress is exposed as a `progressbar`, and the timer announces 5-minute and 1-minute warnings through a polite live region.
 - The results chart has a visually hidden data table as its text alternative.
+- Interactive targets (answer options, buttons, preset rows) are at least 44px tall, and swipe gestures supplement rather than replace buttons.
 - Colour choices target WCAG AA contrast, and motion is reduced when `prefers-reduced-motion` is set.
+
+## 📱 Mobile Behaviour
+
+- Answer options, buttons, the timer pill, and preset rows meet the 44px touch-target guideline.
+- In one-question-at-a-time mode, swiping left advances and swiping right returns; mostly-vertical gestures are ignored so the page still scrolls.
+- The history stat cards reflow to two columns on narrow screens, and the admin panel becomes full width.
+- Swipe navigation is disabled in all-at-once mode, where every question is already on screen.
 
 ## 📝 Adding or Editing Questions (`questions.json`)
 
@@ -204,7 +229,9 @@ Add the chosen license as a `LICENSE` file and link it from this section.
 - Extend the review or results views by modifying templates inside `app.js` (`createQuestionMarkup`, `renderReviewList`, `renderResults`).
 - To add new categories, create a new key in `questions.json` and make sure each preset still has enough questions to sample from it.
 - Attempt history uses the `ds-quiz:attempts:v1` `localStorage` key. Change `historyLimit` to control retention, or `showHistory` to disable it.
+- Custom admin questions use the `ds-quiz:admin-questions:v1` `localStorage` key and are merged into `state.questions` at startup.
 - When changing markup, preserve the `aria-labelledby` relationships, the focus targets, and the hidden chart data table so screen-reader support keeps working.
+- The swipe threshold lives in `SWIPE_MIN_DISTANCE` (`app.js`); raise it if accidental swipes occur on small screens.
 
 ## 🌐 Deploying to GitHub Pages
 
@@ -225,6 +252,9 @@ No build step is required—`config.json` and `questions.json` are served as sta
 - [x] Provides review and timer features when enabled.
 - [x] Displays answers, explanations, and category-level insights on completion.
 - [x] Saves attempt summaries in the browser and lets users clear them.
+- [x] Shows attempt trends through history stat cards and an expandable attempt table.
 - [x] Supports keyboard navigation, visible focus, labelled controls, and an accessible chart alternative.
+- [x] Meets 44px touch-target sizing and supports swipe navigation in one-at-a-time mode.
+- [x] Offers a `?admin=1` panel for adding prototype questions without touching `questions.json`.
 
 Enjoy tailoring the assessment for your team or learners! 🚀

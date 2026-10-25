@@ -1,8 +1,10 @@
 'use strict';
 
 const HISTORY_STORAGE_KEY = 'ds-quiz:attempts:v1';
+const ADMIN_STORAGE_KEY = 'ds-quiz:admin-questions:v1';
 const DEFAULT_HISTORY_LIMIT = 20;
 const TIMER_WARNING_SECONDS = [300, 60];
+const SWIPE_MIN_DISTANCE = 40;
 
 const state = {
     config: null,
@@ -21,7 +23,9 @@ const state = {
     timerWarningsShown: new Set(),
     history: [],
     historyAvailable: true,
-    announceTimeout: null
+    announceTimeout: null,
+    adminMode: false,
+    adminQuestions: []
 };
 
 const dom = {};
@@ -68,11 +72,18 @@ function cacheDom() {
     dom.historySummary = document.getElementById('history-summary');
     dom.historyBody = document.getElementById('history-body');
     dom.clearHistoryBtn = document.getElementById('clear-history-btn');
+    dom.historyStats = document.getElementById('history-stats');
+    dom.historyDetails = document.getElementById('history-details');
+    dom.historyDetailsSummary = document.getElementById('history-details-summary');
     dom.adminPanel = document.getElementById('admin-panel');
     dom.adminPreset = document.getElementById('admin-preset');
-    dom.bankSummary = document.getElementById('bank-summary');
-    dom.adminClose = document.getElementById('admin-close');
     dom.addQuestionForm = document.getElementById('add-question-form');
+    dom.adminOptions = document.getElementById('admin-options');
+    dom.adminCategory = document.getElementById('admin-category');
+    dom.adminList = document.getElementById('admin-list');
+    dom.adminCounts = document.getElementById('admin-counts');
+    dom.adminClear = document.getElementById('admin-clear');
+    dom.adminClose = document.getElementById('admin-close');
     dom.announcer = document.getElementById('sr-announcer');
 }
 
@@ -97,16 +108,58 @@ function attachEventListeners() {
 
     dom.questionContainer?.addEventListener('change', handleAnswerChange);
     dom.reviewList?.addEventListener('click', handleReviewNavigation);
-    // Swipe navigation (one‑at‑a‑time only)
-    if (state.config.displayMode !== 'all-at-once') {
-        let startX = 0;
-        dom.questionContainer.addEventListener('touchstart', e => { startX = e.changedTouches[0].clientX; });
-        dom.questionContainer.addEventListener('touchend', e => {
-            const diff = startX - e.changedTouches[0].clientX;
-            if (diff > 30) navigateQuestion(1);
-            if (diff < -30) navigateQuestion(-1);
-        });
-    }
+
+    attachSwipeNavigation();
+
+    dom.addQuestionForm?.addEventListener('submit', handleAdminQuestionSubmit);
+    dom.adminClose?.addEventListener('click', closeAdminPanel);
+    dom.adminClear?.addEventListener('click', removeAllAdminQuestions);
+    dom.adminCategory?.addEventListener('change', renderAdminSummary);
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && state.adminMode) {
+            closeAdminPanel();
+        }
+    });
+}
+
+// Touch swipes change questions in one-at-a-time mode. The mode is checked when
+// the gesture ends rather than when the listener is attached, because this runs
+// before config.json has loaded.
+function attachSwipeNavigation() {
+    if (!dom.questionContainer) return;
+
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+
+    dom.questionContainer.addEventListener('touchstart', event => {
+        const touch = event.changedTouches?.[0];
+        if (!touch || state.config?.displayMode === 'all-at-once') {
+            tracking = false;
+            return;
+        }
+        startX = touch.clientX;
+        startY = touch.clientY;
+        tracking = true;
+    }, { passive: true });
+
+    dom.questionContainer.addEventListener('touchend', event => {
+        if (!tracking) return;
+        tracking = false;
+
+        const touch = event.changedTouches?.[0];
+        if (!touch || state.config?.displayMode === 'all-at-once') return;
+
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+
+        // Ignore mostly-vertical gestures so page scrolling still works.
+        if (Math.abs(deltaX) < SWIPE_MIN_DISTANCE) return;
+        if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+        navigateQuestion(deltaX < 0 ? 1 : -1);
+    }, { passive: true });
 }
 
 async function initializeApp() {
@@ -125,31 +178,259 @@ async function initializeApp() {
         state.config = config;
         state.questions = questions;
         state.selectedPreset = config.defaultPreset || (config.presets ? Object.keys(config.presets)[0] : null);
-        // Admin mode flag ( ?admin=1 )
-        state.adminMode = false;
-        try {
-            const params = new URLSearchParams(location.search);
-            if (params.get('admin') === '1') {
-                state.adminMode = true;
-                state.adminQuestions = [];
-            }
-        } catch {}
+        loadAdminQuestions();
         loadHistory();
-    // Show/hide admin panel ( ?admin=1 )
-    const adminPanel = dom.adminPanel;
-    if (adminPanel) {
-        adminPanel.setAttribute('aria-hidden', state.adminMode ? 'false' : 'true');
-    }
-    renderLengthSelector();
         renderLengthSelector();
         renderConfigSummary();
         renderHistory();
         configureUiFromSettings();
+        initializeAdminMode();
     } catch (error) {
         console.error('Failed to initialize application', error);
         dom.configSummary.innerHTML = '<p class="error">Unable to load configuration or questions. Please refresh the page.</p>';
         dom.startBtn.disabled = true;
     }
+}
+
+/* ---------------------------------------------------------------------------
+ * Question-bank admin tools (?admin=1)
+ * Additions live in localStorage only. They never touch questions.json.
+ * ------------------------------------------------------------------------- */
+
+function isAdminRequested() {
+    try {
+        return new URLSearchParams(window.location.search).get('admin') === '1';
+    } catch (error) {
+        return false;
+    }
+}
+
+function initializeAdminMode() {
+    state.adminMode = isAdminRequested();
+
+    if (!dom.adminPanel) return;
+
+    dom.adminPanel.hidden = !state.adminMode;
+    dom.adminPanel.setAttribute('aria-hidden', String(!state.adminMode));
+    document.body.classList.toggle('admin-active', state.adminMode);
+
+    if (!state.adminMode) return;
+
+    renderAdminCategories();
+    renderAdminSummary();
+}
+
+function closeAdminPanel(options = {}) {
+    if (!dom.adminPanel) return;
+
+    state.adminMode = false;
+    dom.adminPanel.hidden = true;
+    dom.adminPanel.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('admin-active');
+
+    if (!options.silent) {
+        focusElement(dom.welcomeHeading);
+        announce('Admin panel closed.');
+    }
+}
+
+function loadAdminQuestions() {
+    let stored = [];
+
+    try {
+        const raw = window.localStorage.getItem(ADMIN_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        stored = Array.isArray(parsed) ? parsed.filter(isValidAdminQuestion) : [];
+    } catch (error) {
+        console.warn('Unable to read custom questions', error);
+        stored = [];
+    }
+
+    state.adminQuestions = stored;
+    stored.forEach(mergeAdminQuestion);
+}
+
+function mergeAdminQuestion(question) {
+    const bucket = state.questions[question.category];
+    if (!Array.isArray(bucket)) return;
+    if (bucket.some(existing => existing.id === question.id)) return;
+    bucket.push(question);
+}
+
+function persistAdminQuestions() {
+    try {
+        window.localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(state.adminQuestions));
+    } catch (error) {
+        console.warn('Unable to save custom questions', error);
+    }
+}
+
+function isValidAdminQuestion(question) {
+    return Boolean(question)
+        && typeof question === 'object'
+        && typeof question.id === 'string'
+        && typeof question.question === 'string'
+        && question.question.trim().length > 0
+        && Array.isArray(question.options)
+        && question.options.length === 4
+        && question.options.every(option => typeof option === 'string' && option.trim().length > 0)
+        && Number.isInteger(question.correctAnswer)
+        && question.correctAnswer >= 0
+        && question.correctAnswer < 4
+        && typeof question.category === 'string'
+        && typeof question.explanation === 'string';
+}
+
+function renderAdminOptions() {
+    if (!dom.adminOptions || dom.adminOptions.childElementCount > 0) return;
+
+    dom.adminOptions.innerHTML = [0, 1, 2, 3].map(index => {
+        const letter = String.fromCharCode(65 + index);
+        return `
+            <div class="admin-option-row">
+                <input type="radio" id="admin-correct-${index}" name="correct" value="${index}" ${index === 0 ? 'checked' : ''} aria-label="Option ${letter} is the correct answer" />
+                <input type="text" id="admin-option-${index}" name="option${index}" aria-label="Option ${letter} text" placeholder="Option ${letter}" required />
+            </div>
+        `;
+    }).join('');
+}
+
+function renderAdminCategories() {
+    if (!dom.adminCategory) return;
+
+    const categories = Object.keys(state.questions || {});
+    const current = dom.adminCategory.value;
+
+    dom.adminCategory.innerHTML = categories
+        .map(category => `<option value="${escapeAttribute(category)}">${escapeHtml(formatCategory(category))}</option>`)
+        .join('');
+
+    if (categories.includes(current)) {
+        dom.adminCategory.value = current;
+    }
+}
+
+function renderAdminSummary() {
+    if (dom.adminPreset) {
+        dom.adminPreset.textContent = getActivePreset()?.label || 'none';
+    }
+
+    renderAdminOptions();
+    renderAdminQuestionsList();
+    renderAdminCounts();
+}
+
+function renderAdminQuestionsList() {
+    if (!dom.adminList) return;
+
+    if (!state.adminQuestions.length) {
+        dom.adminList.innerHTML = '<p class="admin-empty">No custom questions added yet.</p>';
+    } else {
+        dom.adminList.innerHTML = `
+            <ul class="admin-list">
+                ${state.adminQuestions.map(question => `
+                    <li>
+                        <span>${escapeHtml(question.question)}</span>
+                        <span class="admin-list-meta">${escapeHtml(formatCategory(question.category))}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+    }
+
+    if (dom.adminClear) {
+        dom.adminClear.disabled = state.adminQuestions.length === 0;
+    }
+}
+
+function renderAdminCounts() {
+    if (!dom.adminCounts) return;
+
+    const rows = Object.entries(state.questions || {})
+        .map(([category, list]) => `
+            <li>
+                <span>${escapeHtml(formatCategory(category))}</span>
+                <span class="admin-count-value">${Array.isArray(list) ? list.length : 0}</span>
+            </li>
+        `)
+        .join('');
+
+    dom.adminCounts.innerHTML = `<ul class="admin-counts">${rows}</ul>`;
+}
+
+function handleAdminQuestionSubmit(event) {
+    event.preventDefault();
+    if (!state.adminMode || !dom.addQuestionForm) return;
+
+    const form = dom.addQuestionForm;
+    const options = [0, 1, 2, 3].map(index => form.elements[`option${index}`]?.value.trim() || '');
+    const correctInput = form.querySelector('input[name="correct"]:checked');
+    const category = form.elements.category?.value;
+    const questionText = form.elements.question?.value.trim() || '';
+    const explanation = form.elements.explanation?.value.trim() || '';
+
+    if (options.some(option => !option) || !questionText || !explanation || !category) {
+        announce('Please complete every field before adding the question.');
+        return;
+    }
+
+    if (!Array.isArray(state.questions[category])) {
+        announce('Choose a valid category.');
+        return;
+    }
+
+    const question = {
+        id: `admin-${Date.now()}-${state.adminQuestions.length + 1}`,
+        question: questionText,
+        options,
+        correctAnswer: Number(correctInput?.value ?? 0),
+        explanation,
+        category,
+        difficulty: form.elements.difficulty?.value || 'medium',
+        source: 'admin'
+    };
+
+    state.adminQuestions.push(question);
+    mergeAdminQuestion(question);
+    persistAdminQuestions();
+
+    // Counts and preset summaries can change when a category gains questions.
+    state.activeQuestionCounts = null;
+    renderLengthSelector();
+    renderConfigSummary();
+    renderAdminSummary();
+
+    form.reset();
+    announce(`Question added to ${formatCategory(category)}.`);
+}
+
+function removeAllAdminQuestions() {
+    if (!state.adminMode || state.adminQuestions.length === 0) return;
+
+    const confirmed = window.confirm('Remove every question added from this browser? questions.json is not affected.');
+    if (!confirmed) return;
+
+    state.adminQuestions.forEach(question => {
+        const bucket = state.questions[question.category];
+        if (Array.isArray(bucket)) {
+            const index = bucket.findIndex(entry => entry.id === question.id);
+            if (index !== -1) bucket.splice(index, 1);
+        }
+    });
+
+    state.adminQuestions = [];
+
+    try {
+        window.localStorage.removeItem(ADMIN_STORAGE_KEY);
+    } catch (error) {
+        console.warn('Unable to clear custom questions', error);
+    }
+
+    state.activeQuestionCounts = null;
+    renderLengthSelector();
+    renderConfigSummary();
+    renderAdminSummary();
+    announce('Custom questions removed.');
 }
 
 function getActivePreset() {
@@ -302,6 +583,10 @@ function configureUiFromSettings() {
 
 function startAssessment() {
     if (!state.config || !state.questions) return;
+
+    if (state.adminMode) {
+        closeAdminPanel({ silent: true });
+    }
 
     prepareSelectedQuestions();
 
@@ -1070,6 +1355,9 @@ function renderHistory() {
 
     dom.historySummary.textContent = `${summaryParts.join(' · ')}.`;
 
+    renderHistoryStats(attempts, best, latest, delta);
+    renderHistoryDetailsSummary(attempts);
+
     dom.historyBody.innerHTML = attempts.map(attempt => {
         const passed = typeof attempt.passed === 'boolean'
             ? attempt.passed
@@ -1085,6 +1373,47 @@ function renderHistory() {
             </tr>
         `;
     }).join('');
+}
+
+function renderHistoryStats(attempts, best, latest, delta) {
+    if (!dom.historyStats) return;
+
+    const deltaLabel = delta === null
+        ? 'First attempt'
+        : delta > 0
+            ? `+${delta} pts`
+            : delta < 0
+                ? `${delta} pts`
+                : 'No change';
+
+    const deltaClass = delta === null ? '' : delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
+
+    dom.historyStats.innerHTML = `
+        <div class="history-stat">
+            <span class="history-stat-label">Attempts</span>
+            <span class="history-stat-value">${attempts.length}</span>
+        </div>
+        <div class="history-stat">
+            <span class="history-stat-label">Best</span>
+            <span class="history-stat-value">${best}%</span>
+        </div>
+        <div class="history-stat">
+            <span class="history-stat-label">Latest</span>
+            <span class="history-stat-value">${latest.percentage}%</span>
+        </div>
+        <div class="history-stat">
+            <span class="history-stat-label">Change</span>
+            <span class="history-stat-value ${deltaClass}">${deltaLabel}</span>
+        </div>
+    `;
+}
+
+function renderHistoryDetailsSummary(attempts) {
+    if (!dom.historyDetails || !dom.historyDetailsSummary) return;
+
+    dom.historyDetailsSummary.textContent = attempts.length === 1
+        ? 'Show details for 1 attempt'
+        : `Show details for all ${attempts.length} attempts`;
 }
 
 function formatDate(isoString) {
@@ -1122,6 +1451,10 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+function escapeAttribute(value) {
+    return escapeHtml(value);
 }
 
 function formatCategory(categoryKey) {
