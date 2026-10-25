@@ -1,0 +1,18 @@
+{
+    "questionCounts": {
+        "statistics": 4,
+        "machine_learning": 4,
+        "programming": 4,
+        "data_manipulation": 4,
+        "mathematics": 4,
+        "domain_knowledge": 4
+    },
+    "displayMode": "one-at-a-time",
+    "allowReview": true,
+    "shuffleQuestions": true,
+    "shuffleOptions": true,
+    "passingScore": 75,
+    "strengthThreshold": 75,
+    "weaknessThreshold": 60,
+    "timeLimitMinutes": 30
+}
