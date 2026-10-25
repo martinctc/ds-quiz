@@ -4,7 +4,7 @@ Single-page assessment tool that helps data professionals measure strengths and 
 
 ## ✨ Features
 
-- Question bank grouped into six categories: statistics, machine learning, programming, data manipulation, mathematics, and domain knowledge.
+- Question bank grouped into nine categories: statistics, machine learning, programming, data manipulation, mathematics, domain knowledge, data engineering, data visualization, and ethics/governance.
 - Configurable sampling of questions per category with automatic shuffling of both questions and answer options.
 - Flexible delivery: present one question at a time or all questions at once, with optional review step before submission.
 - Timer support, progress tracking, and the ability to revisit answers prior to submitting.
@@ -77,7 +77,10 @@ Example:
 		"programming": 4,
 		"data_manipulation": 4,
 		"mathematics": 4,
-		"domain_knowledge": 4
+		"domain_knowledge": 4,
+		"data_engineering": 4,
+		"data_visualization": 4,
+		"ethics_governance": 4
 	},
 	"displayMode": "one-at-a-time",
 	"allowReview": true,
@@ -86,7 +89,7 @@ Example:
 	"passingScore": 75,
 	"strengthThreshold": 75,
 	"weaknessThreshold": 60,
-	"timeLimitMinutes": 30
+	"timeLimitMinutes": 40
 }
 ```
 
@@ -118,6 +121,18 @@ Guidelines:
 - Provide exactly four options; `correctAnswer` is the **zero-based index** of the correct option.
 - Keep explanations concise but informative—these display after submission.
 - Maintain at least as many questions per category as your `questionCounts` request to preserve randomness.
+
+### Difficulty rubric
+
+Use this rubric when assigning `difficulty` so the meaning of each level stays consistent across categories:
+
+| Level | What it tests | Example |
+| --- | --- | --- |
+| `easy` | Recall or recognition of a single concept, definition, or fact. | "Which distribution models the number of successes in n independent Bernoulli trials?" |
+| `medium` | Application or interpretation, often combining two concepts or reading a result correctly. | "A hypothesis test returns a p-value of 0.03. Which interpretation is correct?" |
+| `hard` | Multi-step reasoning, edge cases, trade-offs, or specialized knowledge. | "Why can a mutable default argument such as `def f(x=[])` cause subtle bugs in Python?" |
+
+A useful check: if a practitioner who knows the concept can answer on first read, it is `easy`; if they must reason or apply it, `medium`; if they need deep or specialized reasoning, `hard`.
 
 ## ✅ Validating the Question Bank
 

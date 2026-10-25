@@ -64,6 +64,71 @@
             "correctAnswer": 3,
             "difficulty": "easy",
             "explanation": "The median is resistant to outliers, whereas the mean, variance, and standard deviation are strongly affected."
+        },
+        {
+            "id": "statistics-6",
+            "question": "A hypothesis test returns a p-value of 0.03. Which interpretation is correct?",
+            "options": [
+                "There is a 3% chance the null hypothesis is true",
+                "Assuming the null hypothesis is true, there is a 3% chance of observing data at least as extreme as what was observed",
+                "The effect size is 3%",
+                "The alternative hypothesis is true with 97% probability"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A p-value is the probability of observing data at least as extreme as the sample, assuming the null hypothesis is true. It is not the probability that the null is true."
+        },
+        {
+            "id": "statistics-7",
+            "question": "Which measure best describes the strength of a linear relationship between two continuous variables?",
+            "options": [
+                "Chi-square statistic",
+                "Pearson correlation coefficient",
+                "Odds ratio",
+                "Analysis of variance"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "The Pearson correlation coefficient measures the strength and direction of a linear relationship between two continuous variables."
+        },
+        {
+            "id": "statistics-8",
+            "question": "According to the Law of Large Numbers, what happens as sample size increases?",
+            "options": [
+                "The sample mean always equals the population mean",
+                "The sample mean converges in probability to the population mean",
+                "The sample becomes more variable",
+                "The population variance approaches zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The Law of Large Numbers states that the sample mean converges in probability to the population mean as the sample size grows."
+        },
+        {
+            "id": "statistics-9",
+            "question": "What is the purpose of the Bonferroni correction when conducting multiple hypothesis tests?",
+            "options": [
+                "To increase the chance of a Type I error",
+                "To control the family-wise error rate by lowering the significance threshold",
+                "To remove the need for a control group",
+                "To increase statistical power"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "The Bonferroni correction divides the significance level by the number of tests, controlling the family-wise error rate at the cost of reduced power."
+        },
+        {
+            "id": "statistics-10",
+            "question": "Which distribution models the number of successes in a fixed number of independent Bernoulli trials?",
+            "options": [
+                "Poisson distribution",
+                "Normal distribution",
+                "Binomial distribution",
+                "Exponential distribution"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "The binomial distribution gives the probability of a number of successes in a fixed number of independent trials, each with the same success probability."
         }
     ],
     "machine_learning": [
@@ -131,6 +196,71 @@
             "correctAnswer": 1,
             "difficulty": "hard",
             "explanation": "Sigmoid and tanh activations can squash gradients to very small values, making it difficult for early layers to learn."
+        },
+        {
+            "id": "ml-6",
+            "question": "A model achieves 99% accuracy on training data but 70% on validation data. This is a sign of...",
+            "options": [
+                "Underfitting",
+                "Overfitting",
+                "Data leakage",
+                "Class imbalance"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A large gap between training and validation performance indicates overfitting: the model has learned the training data too closely and does not generalize."
+        },
+        {
+            "id": "ml-7",
+            "question": "Which is a key limitation of k-means clustering?",
+            "options": [
+                "It cannot handle more than two features",
+                "It requires labeled data",
+                "It assumes roughly spherical clusters and requires choosing k in advance",
+                "It always finds the global optimum"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "medium",
+            "explanation": "K-means assumes clusters are roughly spherical and similar in size, and the number of clusters k must be specified. It can also converge to local optima."
+        },
+        {
+            "id": "ml-8",
+            "question": "What is the primary purpose of k-fold cross-validation?",
+            "options": [
+                "To increase training accuracy",
+                "To estimate generalization performance while reducing dependence on a single train/test split",
+                "To remove outliers",
+                "To automatically select the learning rate"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Cross-validation repeatedly splits the data into training and validation folds to provide a more stable estimate of out-of-sample performance."
+        },
+        {
+            "id": "ml-9",
+            "question": "Compared with L2 regularization, L1 regularization tends to...",
+            "options": [
+                "Produce dense coefficients",
+                "Produce sparse coefficients by driving some to zero",
+                "Always improve accuracy",
+                "Remove the need for a validation set"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "L1 regularization adds an absolute-value penalty that can shrink some coefficients exactly to zero, yielding sparse models and implicit feature selection."
+        },
+        {
+            "id": "ml-10",
+            "question": "In a fraud detection model, raising the classification threshold typically...",
+            "options": [
+                "Increases recall and decreases precision",
+                "Increases precision and decreases recall",
+                "Increases both precision and recall",
+                "Has no effect on precision or recall"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A higher threshold makes positive predictions more conservative: fewer items are flagged, so precision tends to rise while recall falls."
         }
     ],
     "programming": [
@@ -198,6 +328,71 @@
             "correctAnswer": 2,
             "difficulty": "medium",
             "explanation": "Big-O notation characterizes the upper bound on the growth rate of runtime or space as input size increases."
+        },
+        {
+            "id": "prog-6",
+            "question": "Why can a mutable default argument such as `def f(x=[])` cause subtle bugs in Python?",
+            "options": [
+                "Python disallows mutable defaults",
+                "The default object is created once and shared across calls",
+                "The default is recreated on every call",
+                "It causes a syntax error"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Default arguments are evaluated once when the function is defined. A shared mutable default can accumulate state across calls; use `None` and create a new object inside the function instead."
+        },
+        {
+            "id": "prog-7",
+            "question": "Which statement about Python tuples is true?",
+            "options": [
+                "They are mutable",
+                "They are immutable and can be used as dictionary keys if their elements are hashable",
+                "They cannot be nested",
+                "They always use more memory than lists"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Tuples are immutable sequences. If all their elements are hashable, they can serve as dictionary keys."
+        },
+        {
+            "id": "prog-8",
+            "question": "What does `git rebase` do?",
+            "options": [
+                "Creates a merge commit",
+                "Replays commits onto a new base, rewriting commit history",
+                "Deletes the current branch",
+                "Reverts the last commit"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`git rebase` moves or replays commits onto another base commit, producing a linear history. It rewrites commit hashes, so avoid rebasing shared branches."
+        },
+        {
+            "id": "prog-9",
+            "question": "In SQL, which clause defines the window used by a window function?",
+            "options": [
+                "GROUP BY",
+                "OVER",
+                "HAVING",
+                "DISTINCT"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Window functions use an `OVER (...)` clause to define the partition and ordering that determine the window of rows."
+        },
+        {
+            "id": "prog-10",
+            "question": "What is the main purpose of a Python virtual environment?",
+            "options": [
+                "To speed up the interpreter",
+                "To isolate project dependencies from other projects and the system Python",
+                "To compile Python to C",
+                "To enable multithreading"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A virtual environment provides an isolated Python installation and package set, preventing dependency conflicts between projects."
         }
     ],
     "data_manipulation": [
@@ -265,6 +460,71 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Median imputation is robust to skewed distributions and reduces the effect of outliers."
+        },
+        {
+            "id": "dm-6",
+            "question": "What is the difference between `df.loc` and `df.iloc` in pandas?",
+            "options": [
+                "`loc` is label-based; `iloc` is integer-position-based",
+                "`loc` is for columns only; `iloc` is for rows only",
+                "They are identical",
+                "`iloc` is deprecated"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "`loc` selects by index/column labels, while `iloc` selects by integer positions."
+        },
+        {
+            "id": "dm-7",
+            "question": "In SQL, which condition correctly tests whether a value is NULL?",
+            "options": [
+                "value = NULL",
+                "value IS NULL",
+                "value == NULL",
+                "value <> NULL"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "NULL represents an unknown value, so comparisons with `=` do not work. Use `IS NULL` or `IS NOT NULL`."
+        },
+        {
+            "id": "dm-8",
+            "question": "Why is vectorized pandas/NumPy code often preferred over `apply`?",
+            "options": [
+                "It is always more readable",
+                "It typically runs faster by leveraging optimized compiled loops",
+                "It avoids using memory",
+                "It automatically handles missing values"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Vectorized operations push work into optimized C-level routines, avoiding Python-level looping overhead."
+        },
+        {
+            "id": "dm-9",
+            "question": "Standardization (z-score scaling) transforms features to have...",
+            "options": [
+                "A minimum of 0 and maximum of 1",
+                "Mean 0 and standard deviation 1",
+                "Median 0 and interquartile range 1",
+                "Unit Euclidean norm"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Standardization subtracts the mean and divides by the standard deviation, giving each feature mean 0 and standard deviation 1."
+        },
+        {
+            "id": "dm-10",
+            "question": "What can cause a join to return more rows than either input table?",
+            "options": [
+                "An INNER JOIN on a unique key",
+                "A JOIN on a non-unique key that produces multiple matches per row",
+                "Using DISTINCT",
+                "Filtering with WHERE"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Joining on a non-unique key creates a row for every matching pair, which can multiply row counts."
         }
     ],
     "mathematics": [
@@ -332,6 +592,71 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "The first derivative is 1/x; differentiating again gives -1/x^2."
+        },
+        {
+            "id": "math-6",
+            "question": "For the matrix product AB to be defined, which condition must hold?",
+            "options": [
+                "A and B must be square",
+                "The number of columns of A must equal the number of rows of B",
+                "The number of rows of A must equal the number of columns of B",
+                "A and B must have identical dimensions"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Matrix multiplication AB requires the inner dimensions to match: columns of A equal rows of B."
+        },
+        {
+            "id": "math-7",
+            "question": "In gradient descent, the parameter update rule is...",
+            "options": [
+                "theta = theta + alpha * gradient",
+                "theta = theta - alpha * gradient",
+                "theta = alpha * gradient",
+                "theta = theta / alpha"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Gradient descent moves parameters in the direction opposite the gradient, scaled by the learning rate alpha."
+        },
+        {
+            "id": "math-8",
+            "question": "Which property holds for a convex function?",
+            "options": [
+                "It has multiple local minima",
+                "Any local minimum is also a global minimum",
+                "It is always linear",
+                "It cannot be differentiated"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "For convex functions, any local minimum is a global minimum, which is why convex optimization is well behaved."
+        },
+        {
+            "id": "math-9",
+            "question": "An eigenvector v of a matrix A satisfies which equation?",
+            "options": [
+                "Av = 0",
+                "Av = lambda v for some scalar lambda",
+                "A^T v = v",
+                "Av = v^T"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "An eigenvector is a nonzero vector whose direction is unchanged by A: Av = lambda v, where lambda is the eigenvalue."
+        },
+        {
+            "id": "math-10",
+            "question": "Two events A and B are independent if...",
+            "options": [
+                "P(A and B) = P(A) + P(B)",
+                "P(A and B) = P(A) * P(B)",
+                "P(A | B) = P(B)",
+                "P(A or B) = 1"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Independence means the joint probability factorizes: P(A and B) = P(A) * P(B)."
         }
     ],
     "domain_knowledge": [
@@ -399,6 +724,467 @@
             "correctAnswer": 2,
             "difficulty": "medium",
             "explanation": "Product managers ensure data initiatives map to business goals and coordinate cross-functional stakeholders."
+        },
+        {
+            "id": "domain-6",
+            "question": "Which CRISP-DM phase assesses whether the model meets business objectives?",
+            "options": [
+                "Data Preparation",
+                "Modeling",
+                "Evaluation",
+                "Deployment"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "The Evaluation phase reviews results against business objectives and decides whether to proceed to deployment."
+        },
+        {
+            "id": "domain-7",
+            "question": "What is data governance primarily concerned with?",
+            "options": [
+                "Model accuracy",
+                "Policies, ownership, and accountability for data assets",
+                "GPU provisioning",
+                "Dashboard design"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Data governance defines who owns data, how it may be used, and the policies and controls that ensure quality, privacy, and compliance."
+        },
+        {
+            "id": "domain-8",
+            "question": "An A/B test produces a p-value of 0.20. What is a reasonable conclusion?",
+            "options": [
+                "The variant is definitively better",
+                "There is insufficient evidence of a difference at the 5% significance level",
+                "The test was invalid",
+                "The effect size is zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A p-value of 0.20 does not cross the conventional 0.05 threshold, so there is insufficient evidence to reject the null hypothesis."
+        },
+        {
+            "id": "domain-9",
+            "question": "A data lake primarily stores...",
+            "options": [
+                "Only structured data in tables",
+                "Raw data in its native format, including structured and unstructured data",
+                "Only streaming data",
+                "Only aggregated metrics"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A data lake stores raw data in native formats at scale, including structured, semi-structured, and unstructured data."
+        },
+        {
+            "id": "domain-10",
+            "question": "When presenting results to non-technical stakeholders, the best approach is to...",
+            "options": [
+                "Focus on model hyperparameters",
+                "Lead with business impact and use plain language",
+                "Include all statistical derivations",
+                "Avoid visualizations"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Non-technical audiences need the business implication first, supported by clear language and visuals rather than technical detail."
+        }
+    ],
+    "data_engineering": [
+        {
+            "id": "de-1",
+            "question": "What distinguishes ELT from ETL?",
+            "options": [
+                "ELT loads raw data before transforming it",
+                "ELT does not use a database",
+                "ETL is only for streaming data",
+                "ELT skips the extraction step"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "ELT loads raw data into the target system and transforms it there, whereas ETL transforms data before loading."
+        },
+        {
+            "id": "de-2",
+            "question": "A data warehouse is optimized for...",
+            "options": [
+                "High-volume transactional writes",
+                "Analytical queries over integrated historical data",
+                "Storing only unstructured data",
+                "Real-time sensor ingestion"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Data warehouses are designed for analytical workloads, aggregating and querying integrated historical data."
+        },
+        {
+            "id": "de-3",
+            "question": "Why is idempotency important in data pipelines?",
+            "options": [
+                "It guarantees faster execution",
+                "Re-running a job produces the same result without duplicating data",
+                "It removes the need for testing",
+                "It encrypts data at rest"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "An idempotent pipeline can be retried safely: running it again yields the same end state instead of duplicate or inconsistent data."
+        },
+        {
+            "id": "de-4",
+            "question": "Why partition a large table by date?",
+            "options": [
+                "To reduce query cost by scanning only relevant partitions",
+                "To increase the number of columns",
+                "To eliminate the need for indexes",
+                "To make joins unnecessary"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Partitioning lets the query engine skip irrelevant partitions, reducing scanned data and cost."
+        },
+        {
+            "id": "de-5",
+            "question": "Schema-on-read means...",
+            "options": [
+                "Data is validated when it is written",
+                "Structure is applied when the data is queried",
+                "Only CSV files are supported",
+                "The schema can never change"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "With schema-on-read, raw data is stored without a fixed schema and structure is imposed at query time."
+        },
+        {
+            "id": "de-6",
+            "question": "In Apache Airflow, a DAG represents...",
+            "options": [
+                "A database index",
+                "A directed acyclic graph of tasks and their dependencies",
+                "A machine learning model",
+                "A file format"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "An Airflow DAG defines tasks and the directed dependencies between them, with no cycles."
+        },
+        {
+            "id": "de-7",
+            "question": "Which of the following is a dimension of data quality?",
+            "options": [
+                "Latency",
+                "Completeness",
+                "Compression",
+                "Sharding"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Completeness is a core data quality dimension, alongside accuracy, consistency, timeliness, and validity."
+        },
+        {
+            "id": "de-8",
+            "question": "Which scenario is best suited to stream processing?",
+            "options": [
+                "Monthly financial reports",
+                "Real-time fraud detection",
+                "Nightly ETL jobs",
+                "Archiving old records"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Stream processing handles continuous data with low latency, which is essential for real-time fraud detection."
+        },
+        {
+            "id": "de-9",
+            "question": "Data lineage answers which question?",
+            "options": [
+                "How accurate is the model?",
+                "Where did the data come from and how was it transformed?",
+                "How much does storage cost?",
+                "Which users have access?"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Data lineage traces the origin and transformation path of data across systems."
+        },
+        {
+            "id": "de-10",
+            "question": "Why add exponential backoff to retries in a pipeline?",
+            "options": [
+                "To fail faster",
+                "To reduce load on a struggling service while retrying",
+                "To increase data volume",
+                "To bypass authentication"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Exponential backoff increases the delay between retries, giving a failing dependency time to recover instead of overwhelming it."
+        }
+    ],
+    "data_visualization": [
+        {
+            "id": "dv-1",
+            "question": "Which chart type is best for showing a trend over time?",
+            "options": [
+                "Pie chart",
+                "Line chart",
+                "Scatter plot",
+                "Histogram"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A line chart connects ordered points, making trends and changes over time easy to see."
+        },
+        {
+            "id": "dv-2",
+            "question": "A key limitation of pie charts is that they...",
+            "options": [
+                "Cannot show parts of a whole",
+                "Make it hard to compare many similar-sized categories precisely",
+                "Require time-series data",
+                "Cannot use color"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "People judge angles and areas less accurately than lengths, so pie charts are poor for fine comparisons among many categories."
+        },
+        {
+            "id": "dv-3",
+            "question": "A scatter plot is most useful for...",
+            "options": [
+                "Showing the relationship between two continuous variables",
+                "Comparing categorical counts",
+                "Displaying a hierarchy",
+                "Showing a single proportion"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "Scatter plots place points by two continuous variables, revealing correlation, clusters, and outliers."
+        },
+        {
+            "id": "dv-4",
+            "question": "A histogram differs from a bar chart because a histogram...",
+            "options": [
+                "Displays continuous data binned into intervals",
+                "Uses only categorical data",
+                "Cannot show frequency",
+                "Requires a log scale"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Histograms bin continuous data into intervals and show the frequency or density in each bin; bar charts compare discrete categories."
+        },
+        {
+            "id": "dv-5",
+            "question": "Why avoid red-green as the only encoding in a chart?",
+            "options": [
+                "It is not visually appealing",
+                "It is difficult for people with color vision deficiency to distinguish",
+                "It slows rendering",
+                "It violates chart licensing"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Red-green color vision deficiency is common, so relying on that pairing alone can make the chart unreadable. Use shape, labels, or a colorblind-safe palette."
+        },
+        {
+            "id": "dv-6",
+            "question": "The term 'chart junk' refers to...",
+            "options": [
+                "Essential data labels",
+                "Visual elements that add clutter without conveying information",
+                "Statistical annotations",
+                "Interactive tooltips"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Chart junk is decoration that distracts from the data, such as unnecessary gridlines, 3D effects, or heavy backgrounds."
+        },
+        {
+            "id": "dv-7",
+            "question": "Truncating a bar chart's y-axis at a non-zero value can...",
+            "options": [
+                "Improve accuracy",
+                "Exaggerate differences between bars",
+                "Remove outliers",
+                "Make the chart accessible"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Starting the axis above zero compresses the visual scale, making small differences look large. Bar charts should generally start at zero."
+        },
+        {
+            "id": "dv-8",
+            "question": "Small multiples (faceting) are used to...",
+            "options": [
+                "Show the same chart across subsets for comparison",
+                "Combine unrelated datasets",
+                "Replace a legend",
+                "Animate data"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Small multiples repeat a chart across groups, making patterns and comparisons across subsets easier to see."
+        },
+        {
+            "id": "dv-9",
+            "question": "A box plot typically displays...",
+            "options": [
+                "Mean and standard deviation only",
+                "Median, quartiles, and potential outliers",
+                "Only the maximum value",
+                "Correlation coefficients"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A box plot shows the median, first and third quartiles, whiskers, and points beyond the whiskers as potential outliers."
+        },
+        {
+            "id": "dv-10",
+            "question": "The data-ink ratio principle suggests...",
+            "options": [
+                "Maximize decorative elements",
+                "Maximize the proportion of ink used for data relative to non-data elements",
+                "Always use 3D charts",
+                "Avoid labels entirely"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Introduced by Edward Tufte, the data-ink ratio encourages removing non-data ink so the chart communicates as efficiently as possible."
+        }
+    ],
+    "ethics_governance": [
+        {
+            "id": "eg-1",
+            "question": "Informed consent in data collection requires that...",
+            "options": [
+                "Data is collected without telling users",
+                "Participants understand and agree to how their data will be used",
+                "Data is anonymized only after collection",
+                "A court order is obtained"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Informed consent means people are told what data is collected, why, and how it will be used, and they voluntarily agree."
+        },
+        {
+            "id": "eg-2",
+            "question": "The principle of data minimization says organizations should...",
+            "options": [
+                "Collect as much data as possible",
+                "Collect only the data necessary for the stated purpose",
+                "Store data indefinitely",
+                "Share data freely"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Data minimization limits collection and retention to what is adequate, relevant, and necessary for the purpose."
+        },
+        {
+            "id": "eg-3",
+            "question": "Algorithmic bias can arise from...",
+            "options": [
+                "Using too many features",
+                "Biased training data or proxy variables",
+                "Using cross-validation",
+                "Writing unit tests"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Bias can enter through unrepresentative or historically biased data, and through proxy variables that correlate with protected attributes."
+        },
+        {
+            "id": "eg-4",
+            "question": "The 'right to be forgotten' allows individuals to...",
+            "options": [
+                "Request deletion of their personal data under certain conditions",
+                "Access source code",
+                "Opt out of all analytics",
+                "Demand model explainability"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "The right to erasure, often called the right to be forgotten, lets individuals request deletion of personal data in specified circumstances."
+        },
+        {
+            "id": "eg-5",
+            "question": "Pseudonymization differs from anonymization because pseudonymization...",
+            "options": [
+                "Is irreversible",
+                "Replaces identifiers but still allows re-identification with additional information",
+                "Removes all data",
+                "Only applies to images"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Pseudonymized data replaces direct identifiers with keys, but re-identification remains possible if the mapping is available. Anonymization aims to make re-identification impossible."
+        },
+        {
+            "id": "eg-6",
+            "question": "Why is there no single universally accepted fairness metric?",
+            "options": [
+                "Fairness cannot be measured",
+                "Different definitions of fairness can conflict with one another",
+                "All models are fair by default",
+                "Only accuracy matters"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Fairness definitions such as demographic parity and equalized odds can be mutually incompatible, so the appropriate metric depends on context and values."
+        },
+        {
+            "id": "eg-7",
+            "question": "Why is model explainability important in high-stakes domains?",
+            "options": [
+                "It improves GPU usage",
+                "It helps stakeholders understand and challenge decisions",
+                "It eliminates bias automatically",
+                "It reduces storage costs"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Explainability supports accountability, informed oversight, and the ability to contest automated decisions in domains such as health and finance."
+        },
+        {
+            "id": "eg-8",
+            "question": "A data retention policy specifies...",
+            "options": [
+                "How long data is kept and when it is deleted",
+                "Which color scheme dashboards use",
+                "How to compress images",
+                "Which programming language to use"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "Retention policies define how long different data types are stored and the conditions and methods for deletion."
+        },
+        {
+            "id": "eg-9",
+            "question": "Differential privacy aims to...",
+            "options": [
+                "Make data publicly available",
+                "Provide statistical guarantees that individual records cannot be inferred",
+                "Encrypt data at rest",
+                "Remove all outliers"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Differential privacy adds calibrated noise so that query results reveal little about any single individual while remaining useful in aggregate."
+        },
+        {
+            "id": "eg-10",
+            "question": "A data scientist finds that a model disproportionately harms a subgroup. The appropriate first step is to...",
+            "options": [
+                "Deploy it anyway",
+                "Document the finding and escalate it to relevant stakeholders",
+                "Delete the data",
+                "Ignore it if overall accuracy is high"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Documenting and escalating a known harm enables informed decisions about mitigation, deployment, and accountability."
         }
     ]
 }
