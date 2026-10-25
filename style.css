@@ -56,6 +56,12 @@ a {
     color: var(--text-secondary);
 }
 
+.disclaimer {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
 .app-main {
     flex: 1;
     display: flex;

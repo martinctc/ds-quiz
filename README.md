@@ -21,6 +21,11 @@ Single-page assessment tool that helps data professionals measure strengths and 
 ├── app.js           # Application logic and state management
 ├── questions.json   # Question bank grouped by category
 ├── config.json      # Assessment configuration options
+├── scripts/
+│   └── validate-questions.mjs  # Schema validation for the question bank and config
+├── .github/workflows/
+│   ├── deploy.yml   # Publishes the site to GitHub Pages
+│   └── validate.yml # Validates the question bank on push / pull request
 └── README.md        # Project documentation
 ```
 
@@ -114,6 +119,41 @@ Guidelines:
 - Keep explanations concise but informative—these display after submission.
 - Maintain at least as many questions per category as your `questionCounts` request to preserve randomness.
 
+## ✅ Validating the Question Bank
+
+`questions.json` and `config.json` are validated by a small Node script so schema drift and typos are caught before deployment.
+
+Run locally (Node 18+):
+
+```powershell
+node scripts/validate-questions.mjs
+```
+
+The script checks for:
+
+- One array per category in `questions.json`.
+- Unique, non-empty question `id`s.
+- Exactly four non-empty `options` per question.
+- `correctAnswer` as an integer between 0 and 3.
+- A non-empty `explanation` and a valid `difficulty` (`easy`, `medium`, `hard`).
+- `questionCounts` that reference real categories and do not exceed the available questions.
+
+The same check runs automatically on every push to `main` and on pull requests via `.github/workflows/validate.yml`.
+
+## ⚠️ Scope & Limitations
+
+This tool is a **self-assessment for learning and practice**. It is not a certification, a validated psychometric instrument, or a substitute for professional evaluation. Scores are based on a small random sample of questions per category and can vary between attempts.
+
+## 📄 Content & Licensing
+
+No license is currently declared for this repository. Before distributing or reusing the content publicly, decide and document:
+
+- **Code** (`index.html`, `style.css`, `app.js`, `scripts/`): e.g. MIT or Apache-2.0.
+- **Question bank** (`questions.json`) and documentation: e.g. CC BY 4.0 or CC0.
+- **Provenance**: confirm each question is original or, if adapted, record the source and its license.
+
+Add the chosen license as a `LICENSE` file and link it from this section.
+
 ## 🎨 Customization Tips
 
 - Update colors or typography in `style.css` by adjusting the CSS variables declared under `:root`.
@@ -122,12 +162,15 @@ Guidelines:
 
 ## 🌐 Deploying to GitHub Pages
 
-1. Push the repository to GitHub.
-2. In GitHub, open **Settings → Pages**.
-3. Choose the `main` branch with the `/ (root)` folder and save.
-4. After Pages finishes building, visit the published URL to access the quiz.
+Deployment is handled by `.github/workflows/deploy.yml`:
 
-No additional build step is required—just ensure `config.json` and `questions.json` are committed so they can be fetched by the client.
+1. Push to `main`, or run the workflow manually from the **Actions** tab.
+2. The workflow uploads the repository as a Pages artifact and deploys it.
+3. The published site is available at `https://<owner>.github.io/<repo>/`.
+
+One-time setup: in **Settings → Pages**, set **Source** to **GitHub Actions**.
+
+No build step is required—`config.json` and `questions.json` are served as static assets.
 
 ## ✅ Verification Checklist
 
