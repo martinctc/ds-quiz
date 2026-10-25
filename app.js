@@ -2,6 +2,7 @@
 
 const state = {
     config: null,
+    selectedPreset: null,
     questions: {},
     selectedQuestions: [],
     currentIndex: 0,
@@ -27,6 +28,7 @@ function cacheDom() {
     dom.reviewScreen = document.getElementById('review-screen');
     dom.resultsScreen = document.getElementById('results-screen');
     dom.configSummary = document.getElementById('config-summary');
+    dom.lengthSelector = document.getElementById('length-selector');
     dom.startBtn = document.getElementById('start-btn');
     dom.prevBtn = document.getElementById('prev-btn');
     dom.nextBtn = document.getElementById('next-btn');
@@ -50,6 +52,7 @@ function cacheDom() {
 
 function attachEventListeners() {
     dom.startBtn?.addEventListener('click', startAssessment);
+    dom.lengthSelector?.addEventListener('change', handleLengthChange);
     dom.prevBtn?.addEventListener('click', () => navigateQuestion(-1));
     dom.nextBtn?.addEventListener('click', () => navigateQuestion(1));
     dom.reviewBtn?.addEventListener('click', showReview);
@@ -84,6 +87,8 @@ async function initializeApp() {
 
         state.config = config;
         state.questions = questions;
+        state.selectedPreset = config.defaultPreset || (config.presets ? Object.keys(config.presets)[0] : null);
+        renderLengthSelector();
         renderConfigSummary();
         configureUiFromSettings();
     } catch (error) {
@@ -93,10 +98,78 @@ async function initializeApp() {
     }
 }
 
+function getActivePreset() {
+    const presets = state.config?.presets;
+    if (!presets) return null;
+    return presets[state.selectedPreset]
+        || presets[state.config.defaultPreset]
+        || Object.values(presets)[0]
+        || null;
+}
+
+function buildQuestionCounts() {
+    const preset = getActivePreset();
+    if (!preset) {
+        return state.config?.questionCounts || {};
+    }
+
+    const counts = {};
+    Object.keys(state.questions || {}).forEach(category => {
+        counts[category] = preset.questionsPerCategory;
+    });
+    return counts;
+}
+
+function getTimeLimit() {
+    const preset = getActivePreset();
+    if (preset && Number.isInteger(preset.timeLimitMinutes)) {
+        return preset.timeLimitMinutes;
+    }
+    return state.config?.timeLimitMinutes ?? null;
+}
+
+function renderLengthSelector() {
+    if (!dom.lengthSelector) return;
+
+    const presets = state.config?.presets;
+    if (!presets) {
+        dom.lengthSelector.classList.add('hidden');
+        return;
+    }
+
+    const counts = buildQuestionCounts();
+    const categoryCount = Object.keys(counts).length;
+
+    dom.lengthSelector.innerHTML = Object.entries(presets).map(([key, preset]) => {
+        const isSelected = key === state.selectedPreset;
+        const total = preset.questionsPerCategory * categoryCount;
+        const timeLabel = preset.timeLimitMinutes ? ` · ~${preset.timeLimitMinutes} min` : '';
+        return `
+            <label class="length-option${isSelected ? ' selected' : ''}">
+                <input type="radio" name="length-preset" value="${key}" ${isSelected ? 'checked' : ''} />
+                <span class="length-copy">
+                    <strong>${preset.label}</strong>
+                    <span class="length-meta">${total} questions${timeLabel}</span>
+                </span>
+            </label>
+        `;
+    }).join('');
+}
+
+function handleLengthChange(event) {
+    const input = event.target.closest('input[name="length-preset"]');
+    if (!input) return;
+
+    state.selectedPreset = input.value;
+    renderLengthSelector();
+    renderConfigSummary();
+    configureUiFromSettings();
+}
+
 function renderConfigSummary() {
     if (!state.config) return;
 
-    const counts = state.config.questionCounts || {};
+    const counts = buildQuestionCounts();
     const items = Object.keys(counts).map(category => {
         const requested = counts[category];
         const available = (state.questions?.[category] || []).length;
@@ -106,13 +179,14 @@ function renderConfigSummary() {
         return `<li><strong>${formatCategory(category)}</strong>: ${note}</li>`;
     });
 
+    const timeLimit = getTimeLimit();
     dom.configSummary.innerHTML = `
         <div class="config-card">
             <h3>Assessment Settings</h3>
             <ul>${items.join('')}</ul>
             <p>Display mode: <strong>${formatDisplayMode(state.config.displayMode)}</strong></p>
             <p>Passing score: <strong>${state.config.passingScore}%</strong></p>
-            ${state.config.timeLimitMinutes ? `<p>Time limit: <strong>${state.config.timeLimitMinutes} minutes</strong></p>` : '<p>No time limit</p>'}
+            ${timeLimit ? `<p>Time limit: <strong>${timeLimit} minutes</strong></p>` : '<p>No time limit</p>'}
             ${state.config.allowReview ? '<p>Review enabled before submission</p>' : '<p>Review disabled</p>'}
         </div>
     `;
@@ -151,7 +225,7 @@ function startAssessment() {
 
 function prepareSelectedQuestions() {
     const selection = [];
-    const counts = state.config.questionCounts || {};
+    const counts = buildQuestionCounts();
 
     Object.keys(counts).forEach(category => {
         const requested = counts[category];
@@ -453,16 +527,46 @@ function renderStrengthsAndWeaknesses(breakdown) {
 function renderExplanations() {
     const cards = state.selectedQuestions.map((question, index) => {
         const userAnswerIndex = state.answers.get(question.id);
-        const userAnswerText = typeof userAnswerIndex === 'number' ? question.options[userAnswerIndex] : 'Unanswered';
-        const isCorrect = typeof userAnswerIndex === 'number' && userAnswerIndex === question.correctAnswer;
-        const correctText = question.options[question.correctAnswer];
+        const hasAnswer = typeof userAnswerIndex === 'number';
+        const isCorrect = hasAnswer && userAnswerIndex === question.correctAnswer;
+
+        const optionsMarkup = question.options.map((option, optionIndex) => {
+            const isCorrectOption = optionIndex === question.correctAnswer;
+            const isUserAnswer = hasAnswer && optionIndex === userAnswerIndex;
+            const classes = ['explanation-option'];
+
+            if (isCorrectOption) classes.push('correct-option');
+            if (isUserAnswer && !isCorrectOption) classes.push('user-wrong');
+
+            const badges = [];
+            if (isCorrectOption) {
+                badges.push('<span class="option-badge correct-badge">Correct answer</span>');
+            }
+            if (isUserAnswer) {
+                badges.push('<span class="option-badge user-badge">Your answer</span>');
+            }
+
+            return `
+                <li class="${classes.join(' ')}">
+                    <span>${option}</span>
+                    <span class="option-badges">${badges.join('')}</span>
+                </li>
+            `;
+        }).join('');
+
+        const answerNote = hasAnswer
+            ? ''
+            : '<p class="answer-note">You did not answer this question.</p>';
 
         return `
             <article class="explanation-card ${isCorrect ? 'correct' : 'incorrect'}">
                 <h4>Question ${index + 1}: ${question.question}</h4>
-                <p><strong>Your answer:</strong> ${userAnswerText}</p>
-                <p><strong>Correct answer:</strong> ${correctText}</p>
-                <p><em>${question.explanation}</em></p>
+                ${answerNote}
+                <ul class="explanation-options">${optionsMarkup}</ul>
+                <div class="why-correct">
+                    <p class="why-label">Why this is correct</p>
+                    <p>${question.explanation}</p>
+                </div>
             </article>
         `;
     });
@@ -529,13 +633,14 @@ function updateProgress() {
 function startTimer() {
     stopTimer();
 
-    if (!state.config.timeLimitMinutes) {
+    const timeLimit = getTimeLimit();
+    if (!timeLimit) {
         dom.timer.textContent = '';
         dom.timer.setAttribute('aria-hidden', 'true');
         return;
     }
 
-    state.remainingSeconds = state.config.timeLimitMinutes * 60;
+    state.remainingSeconds = timeLimit * 60;
     dom.timer.setAttribute('aria-hidden', 'false');
     dom.timer.textContent = formatTime(state.remainingSeconds);
 
@@ -580,6 +685,7 @@ function resetAssessment() {
         state.chart = null;
     }
 
+    renderLengthSelector();
     renderConfigSummary();
     configureUiFromSettings();
     switchView('welcome');

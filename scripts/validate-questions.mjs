@@ -143,44 +143,10 @@ function validateConfig(cfg, bank) {
     return;
   }
 
-  const counts = cfg.questionCounts;
-  if (!isPlainObject(counts)) {
-    errors.push('config.json: "questionCounts" must be an object');
+  if (cfg.presets !== undefined) {
+    validatePresets(cfg, bank);
   } else {
-    const entries = Object.entries(counts);
-    if (entries.length === 0) {
-      errors.push('config.json: "questionCounts" must contain at least one category');
-    }
-    for (const [category, count] of entries) {
-      if (!(category in bank)) {
-        errors.push(
-          `config.json: questionCounts references unknown category "${category}"`
-        );
-        continue;
-      }
-      if (!Number.isInteger(count) || count < 1) {
-        errors.push(
-          `config.json: questionCounts["${category}"] must be a positive integer`
-        );
-        continue;
-      }
-      const available = Array.isArray(bank[category]) ? bank[category].length : 0;
-      if (count > available) {
-        errors.push(
-          `config.json: questionCounts["${category}"] (${count}) exceeds available questions (${available})`
-        );
-      } else if (count === available) {
-        warnings.push(
-          `config.json: "${category}" samples every available question, so that category is not randomised`
-        );
-      }
-    }
-    const unlisted = Object.keys(bank).filter((category) => !(category in counts));
-    if (unlisted.length > 0) {
-      warnings.push(
-        `config.json: categories present but not sampled: ${unlisted.join(', ')}`
-      );
-    }
+    validateQuestionCounts(cfg, bank);
   }
 
   if (!DISPLAY_MODES.has(cfg.displayMode)) {
@@ -207,6 +173,117 @@ function validateConfig(cfg, bank) {
         'config.json: "timeLimitMinutes" must be a positive integer or null'
       );
     }
+  }
+}
+
+function validatePresets(cfg, bank) {
+  const presets = cfg.presets;
+  if (!isPlainObject(presets)) {
+    errors.push('config.json: "presets" must be an object');
+    return;
+  }
+
+  const entries = Object.entries(presets);
+  if (entries.length === 0) {
+    errors.push('config.json: "presets" must contain at least one preset');
+    return;
+  }
+
+  if (typeof cfg.defaultPreset !== 'string' || !(cfg.defaultPreset in presets)) {
+    errors.push(
+      'config.json: "defaultPreset" must reference a key in "presets"'
+    );
+  }
+
+  for (const [key, preset] of entries) {
+    const where = `config.json: presets["${key}"]`;
+
+    if (!isPlainObject(preset)) {
+      errors.push(`${where} must be an object`);
+      continue;
+    }
+
+    if (!isNonEmptyString(preset.label)) {
+      errors.push(`${where}.label must be a non-empty string`);
+    }
+
+    if (
+      !Number.isInteger(preset.questionsPerCategory) ||
+      preset.questionsPerCategory < 1
+    ) {
+      errors.push(`${where}.questionsPerCategory must be a positive integer`);
+    } else {
+      for (const category of Object.keys(bank)) {
+        const available = Array.isArray(bank[category]) ? bank[category].length : 0;
+        if (preset.questionsPerCategory > available) {
+          errors.push(
+            `${where}.questionsPerCategory (${preset.questionsPerCategory}) exceeds available questions in "${category}" (${available})`
+          );
+        } else if (preset.questionsPerCategory === available) {
+          warnings.push(
+            `${where}.questionsPerCategory samples every available question in "${category}", so that category is not randomised`
+          );
+        }
+      }
+    }
+
+    if (preset.timeLimitMinutes !== undefined && preset.timeLimitMinutes !== null) {
+      if (
+        !Number.isInteger(preset.timeLimitMinutes) ||
+        preset.timeLimitMinutes < 1
+      ) {
+        errors.push(
+          `${where}.timeLimitMinutes must be a positive integer or null`
+        );
+      }
+    }
+  }
+}
+
+function validateQuestionCounts(cfg, bank) {
+  const counts = cfg.questionCounts;
+  if (!isPlainObject(counts)) {
+    errors.push(
+      'config.json: either "presets" or "questionCounts" must be provided'
+    );
+    return;
+  }
+
+  const entries = Object.entries(counts);
+  if (entries.length === 0) {
+    errors.push('config.json: "questionCounts" must contain at least one category');
+  }
+
+  for (const [category, count] of entries) {
+    if (!(category in bank)) {
+      errors.push(
+        `config.json: questionCounts references unknown category "${category}"`
+      );
+      continue;
+    }
+    if (!Number.isInteger(count) || count < 1) {
+      errors.push(
+        `config.json: questionCounts["${category}"] must be a positive integer`
+      );
+      continue;
+    }
+    const available = Array.isArray(bank[category]) ? bank[category].length : 0;
+    if (count > available) {
+      errors.push(
+        `config.json: questionCounts["${category}"] (${count}) exceeds available questions (${available})`
+      );
+    } else if (count === available) {
+      warnings.push(
+        `config.json: "${category}" samples every available question, so that category is not randomised`
+      );
+    }
+  }
+
+  const unlisted = Object.keys(bank).filter((category) => !(category in counts));
+  if (unlisted.length > 0) {
+    warnings.push(
+      `config.json: categories present but not sampled: ${unlisted.join(', ')}`
+    );
   }
 }
 

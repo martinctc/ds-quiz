@@ -103,6 +103,47 @@ a {
     margin: 0.75rem 0 1rem;
 }
 
+.length-selector {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.length-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.9rem;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.length-option:hover {
+    border-color: var(--primary);
+}
+
+.length-option.selected {
+    border-color: var(--primary);
+    background-color: #eef2ff;
+}
+
+.length-option input {
+    accent-color: var(--primary);
+}
+
+.length-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.length-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
 .primary-btn,
 .secondary-btn {
     border: none;
@@ -431,6 +472,84 @@ a {
     background-color: rgba(239, 68, 68, 0.08);
 }
 
+.explanation-options {
+    list-style: none;
+    display: grid;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0.25rem 0;
+}
+
+.explanation-option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.75rem;
+    background-color: #ffffff;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.explanation-option.correct-option {
+    border-color: rgba(16, 185, 129, 0.6);
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.explanation-option.user-wrong {
+    border-color: rgba(239, 68, 68, 0.6);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.option-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: flex-end;
+}
+
+.option-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-radius: 999px;
+    padding: 0.15rem 0.45rem;
+    white-space: nowrap;
+}
+
+.correct-badge {
+    background-color: rgba(16, 185, 129, 0.18);
+    color: #047857;
+}
+
+.user-badge {
+    background-color: rgba(74, 108, 247, 0.16);
+    color: var(--primary);
+}
+
+.answer-note {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.why-correct {
+    border-top: 1px solid var(--border);
+    padding-top: 0.65rem;
+    display: grid;
+    gap: 0.25rem;
+}
+
+.why-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
 .results-actions {
     display: flex;
     flex-wrap: wrap;
@@ -484,6 +603,14 @@ canvas {
 
     .option input {
         justify-self: flex-start;
+    }
+
+    .explanation-option {
+        grid-template-columns: 1fr;
+    }
+
+    .option-badges {
+        justify-content: flex-start;
     }
 }
 

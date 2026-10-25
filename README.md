@@ -5,10 +5,11 @@ Single-page assessment tool that helps data professionals measure strengths and 
 ## ✨ Features
 
 - Question bank grouped into nine categories: statistics, machine learning, programming, data manipulation, mathematics, domain knowledge, data engineering, data visualization, and ethics/governance.
+- Selectable assessment length (Quick, Standard, Full) with matching time limits.
 - Configurable sampling of questions per category with automatic shuffling of both questions and answer options.
 - Flexible delivery: present one question at a time or all questions at once, with optional review step before submission.
 - Timer support, progress tracking, and the ability to revisit answers prior to submitting.
-- Detailed results view with overall score, category breakdown, strengths/weaknesses, explanations, and a bar chart (via Chart.js).
+- Detailed post-submission results with overall score, category breakdown, strengths/weaknesses, a bar chart, and per-question explanations that highlight the correct answer and the user's choice.
 - Print-friendly layout so participants can download or print their results.
 - Responsive, accessible UI that adapts from desktop to mobile.
 
@@ -57,7 +58,8 @@ All runtime settings live in `config.json`. Key properties:
 
 | Key | Type | Description |
 | --- | --- | --- |
-| `questionCounts` | object | Number of questions to sample from each category (must not exceed available questions). |
+| `presets` | object | Named assessment lengths. Each preset defines `label`, `questionsPerCategory`, and optional `timeLimitMinutes`. |
+| `defaultPreset` | string | Key of the preset selected by default (e.g. `"standard"`). |
 | `displayMode` | string | `"one-at-a-time"` (default) or `"all-at-once"`. |
 | `allowReview` | boolean | Enables the dedicated review screen before final submission. |
 | `shuffleQuestions` | boolean | Randomizes question order after sampling. |
@@ -65,23 +67,20 @@ All runtime settings live in `config.json`. Key properties:
 | `passingScore` | number | Threshold percentage used to determine pass/fail. |
 | `strengthThreshold` | number | Categories at or above this % are labeled strengths. |
 | `weaknessThreshold` | number | Categories at or below this % are highlighted as focus areas. |
-| `timeLimitMinutes` | number \| null | Optional timer. Set to `null` to disable. |
+| `timeLimitMinutes` | number \| null | Fallback timer used only when a preset omits `timeLimitMinutes`. |
+
+`questionCounts` is still supported as a legacy fallback when `presets` is absent. When both are present, `presets` takes precedence.
 
 Example:
 
 ```json
 {
-	"questionCounts": {
-		"statistics": 4,
-		"machine_learning": 4,
-		"programming": 4,
-		"data_manipulation": 4,
-		"mathematics": 4,
-		"domain_knowledge": 4,
-		"data_engineering": 4,
-		"data_visualization": 4,
-		"ethics_governance": 4
+	"presets": {
+		"quick": { "label": "Quick", "questionsPerCategory": 2, "timeLimitMinutes": 20 },
+		"standard": { "label": "Standard", "questionsPerCategory": 3, "timeLimitMinutes": 30 },
+		"full": { "label": "Full", "questionsPerCategory": 4, "timeLimitMinutes": 40 }
 	},
+	"defaultPreset": "standard",
 	"displayMode": "one-at-a-time",
 	"allowReview": true,
 	"shuffleQuestions": true,
@@ -89,7 +88,7 @@ Example:
 	"passingScore": 75,
 	"strengthThreshold": 75,
 	"weaknessThreshold": 60,
-	"timeLimitMinutes": 40
+	"timeLimitMinutes": 30
 }
 ```
 
