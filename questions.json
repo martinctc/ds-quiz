@@ -129,6 +129,32 @@
             "correctAnswer": 2,
             "difficulty": "easy",
             "explanation": "The binomial distribution gives the probability of a number of successes in a fixed number of independent trials, each with the same success probability."
+        },
+        {
+            "id": "statistics-11",
+            "question": "What does statistical power measure?",
+            "options": [
+                "Probability of correctly rejecting a false null hypothesis",
+                "Probability of a Type I error",
+                "Width of a confidence interval",
+                "Effect size of the treatment"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Power is the probability of detecting an effect when one truly exists (1 − beta)."
+        },
+        {
+            "id": "statistics-12",
+            "question": "How does increasing sample size affect the width of a confidence interval?",
+            "options": [
+                "It makes the interval wider",
+                "It makes the interval narrower",
+                "It has no effect",
+                "It centers the interval at zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Larger samples reduce standard error, producing narrower confidence intervals."
         }
     ],
     "machine_learning": [
@@ -261,6 +287,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "A higher threshold makes positive predictions more conservative: fewer items are flagged, so precision tends to rise while recall falls."
+        },
+        {
+            "id": "ml-11",
+            "question": "Which describes the bias-variance tradeoff?",
+            "options": [
+                "Higher model complexity reduces bias but increases variance",
+                "Higher model complexity reduces both bias and variance",
+                "Higher model complexity increases bias but reduces variance",
+                "Model complexity has no effect on bias or variance"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "As model complexity grows, bias typically falls while variance rises, creating the tradeoff."
+        },
+        {
+            "id": "ml-12",
+            "question": "What is the purpose of SHAP values?",
+            "options": [
+                "To compress the training dataset",
+                "To attribute feature contributions to individual predictions",
+                "To tune hyperparameters automatically",
+                "To remove correlated features"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "SHAP (SHapley Additive exPlanations) assigns each feature an importance value for a specific prediction."
         }
     ],
     "programming": [
@@ -432,6 +484,19 @@
             "correctAnswer": 0,
             "difficulty": "medium",
             "explanation": "na.rm = TRUE ignores NA values so the mean is computed on the remaining observations."
+        },
+        {
+            "id": "prog-r-4",
+            "question": "Which tidyverse verb filters rows based on a condition in R?",
+            "options": [
+                "select()",
+                "filter()",
+                "mutate()",
+                "arrange()"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "filter() keeps rows where the condition is TRUE; select() chooses columns; mutate() adds new columns."
         }
     ],
     "data_manipulation": [
@@ -564,6 +629,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Joining on a non-unique key creates a row for every matching pair, which can multiply row counts."
+        },
+        {
+            "id": "dm-11",
+            "question": "Which SQL clause is used with window functions to define the set of rows?",
+            "options": [
+                "GROUP BY",
+                "OVER",
+                "HAVING",
+                "PARTITION"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The OVER() clause defines the window or partitioning for window functions like ROW_NUMBER()."
+        },
+        {
+            "id": "dm-12",
+            "question": "What does pandas.pivot_table() primarily do?",
+            "options": [
+                "Sorts rows by index",
+                "Aggregates values into a spreadsheet-like table",
+                "Removes duplicate columns",
+                "Fills missing values with zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "pivot_table() summarizes and aggregates data by grouping rows and columns into a matrix."
         }
     ],
     "mathematics": [
@@ -604,7 +695,7 @@
             ],
             "correctAnswer": 1,
             "difficulty": "easy",
-            "explanation": "\u222b 1/(1+x^2) dx = arctan(x) + C."
+            "explanation": "∫ 1/(1+x^2) dx = arctan(x) + C."
         },
         {
             "id": "math-4",
@@ -696,6 +787,19 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Independence means the joint probability factorizes: P(A and B) = P(A) * P(B)."
+        },
+        {
+            "id": "math-11",
+            "question": "If the learning rate in gradient descent is too large, what typically happens?",
+            "options": [
+                "Convergence is slower but stable",
+                "The loss may oscillate or diverge",
+                "The model becomes immune to local minima",
+                "Gradients are always clipped to zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "An excessively large learning rate can overshoot the minimum, causing oscillation or divergence."
         }
     ],
     "domain_knowledge": [
@@ -828,6 +932,19 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Non-technical audiences need the business implication first, supported by clear language and visuals rather than technical detail."
+        },
+        {
+            "id": "domain-11",
+            "question": "In CRISP-DM, what is the main focus of the Deployment phase?",
+            "options": [
+                "Collecting raw data",
+                "Putting the model into production for end users",
+                "Splitting data into train and test sets",
+                "Choosing hyperparameters"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Deployment delivers the trained model into a production environment where it can generate value."
         }
     ],
     "data_engineering": [
@@ -960,6 +1077,19 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Exponential backoff increases the delay between retries, giving a failing dependency time to recover instead of overwhelming it."
+        },
+        {
+            "id": "de-11",
+            "question": "What is a data contract primarily used for?",
+            "options": [
+                "Encrypting data at rest",
+                "Defining schema and quality expectations between data producers and consumers",
+                "Replacing ETL pipelines entirely",
+                "Compressing data for storage"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A data contract is an agreement on data structure, semantics, and quality between upstream producers and downstream consumers."
         }
     ],
     "data_visualization": [
@@ -1092,6 +1222,19 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Introduced by Edward Tufte, the data-ink ratio encourages removing non-data ink so the chart communicates as efficiently as possible."
+        },
+        {
+            "id": "dv-11",
+            "question": "Why use colorblind-safe palettes in charts?",
+            "options": [
+                "They make charts print faster",
+                "They ensure information is distinguishable for people with color vision deficiency",
+                "They reduce file size",
+                "They are required by law"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Colorblind-safe palettes avoid problematic red-green pairings so all viewers can interpret the chart."
         }
     ],
     "ethics_governance": [
@@ -1224,6 +1367,19 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Documenting and escalating a known harm enables informed decisions about mitigation, deployment, and accountability."
+        },
+        {
+            "id": "eg-11",
+            "question": "Which approach reduces algorithmic bias before model training?",
+            "options": [
+                "Collecting only majority-group data",
+                "Pre-processing the training data to balance representation",
+                "Removing the test set",
+                "Increasing the learning rate"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Pre-processing techniques such as re-weighting or re-sampling can reduce bias before the model sees the data."
         }
     ],
     "llm_ai_agents": [
@@ -1251,7 +1407,7 @@
             ],
             "correctAnswer": 1,
             "difficulty": "hard",
-            "explanation": "Observability lets engineers see what an agent decided, which tool it called, and whether errors occurred\u2014critical for debugging and governance."
+            "explanation": "Observability lets engineers see what an agent decided, which tool it called, and whether errors occurred—critical for debugging and governance."
         },
         {
             "id": "llm-ai-agents-3",
@@ -1265,6 +1421,32 @@
             "correctAnswer": 1,
             "difficulty": "hard",
             "explanation": "Because LLM outputs vary with temperature, top-p, and model versions, maintaining reproducible and auditable agent behavior requires logging, seeding, and guardrails."
+        },
+        {
+            "id": "llm-ai-agents-4",
+            "question": "What is prompt injection?",
+            "options": [
+                "Adding more tokens to a prompt",
+                "Manipulating an LLM via malicious user input to override its instructions",
+                "Fine-tuning on synthetic data",
+                "Encrypting model weights"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Prompt injection occurs when user input tricks the model into ignoring its system instructions and performing unintended actions."
+        },
+        {
+            "id": "llm-ai-agents-5",
+            "question": "In an agentic workflow, what does “plan-and-execute” mean?",
+            "options": [
+                "The agent generates a final answer immediately",
+                "The agent first creates a plan of steps, then carries them out with tool use",
+                "The agent only summarizes text",
+                "The agent trains its own weights"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Plan-and-execute agents decompose a goal into steps, then invoke tools to complete each step sequentially."
         }
     ]
 }
