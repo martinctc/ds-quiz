@@ -155,6 +155,45 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Larger samples reduce standard error, producing narrower confidence intervals."
+        },
+        {
+            "id": "statistics-13",
+            "question": "What does a 99% confidence interval imply compared to a 95% interval?",
+            "options": [
+                "It is narrower",
+                "It is wider",
+                "It has the same width",
+                "It is always centered at zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A higher confidence level requires a wider interval to capture the true parameter with greater certainty."
+        },
+        {
+            "id": "statistics-14",
+            "question": "When comparing two population proportions, which test is appropriate?",
+            "options": [
+                "One-sample t-test",
+                "Two-proportion z-test",
+                "Paired t-test",
+                "Chi-square goodness-of-fit"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The two-proportion z-test evaluates whether the difference between two sample proportions is statistically significant."
+        },
+        {
+            "id": "statistics-15",
+            "question": "What does statistical significance tell us?",
+            "options": [
+                "The effect is practically important",
+                "The observed result is unlikely under the null hypothesis",
+                "The sample is large enough",
+                "The model has no errors"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Statistical significance (e.g., p < 0.05) indicates the result is unlikely to occur by random chance alone under the null hypothesis; it does not imply practical importance."
         }
     ],
     "machine_learning": [
@@ -313,6 +352,45 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "SHAP (SHapley Additive exPlanations) assigns each feature an importance value for a specific prediction."
+        },
+        {
+            "id": "ml-13",
+            "question": "What does the F1-score represent?",
+            "options": [
+                "The arithmetic mean of precision and recall",
+                "The harmonic mean of precision and recall",
+                "The geometric mean of precision and recall",
+                "The ratio of precision to recall"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "F1 = 2 × (precision × recall) / (precision + recall), balancing both metrics when classes are imbalanced."
+        },
+        {
+            "id": "ml-14",
+            "question": "In a decision tree, what does the Gini impurity measure?",
+            "options": [
+                "Depth of the tree",
+                "Probability of misclassifying a randomly chosen element",
+                "Number of leaf nodes",
+                "Correlation between features"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Gini impurity measures how often a randomly chosen element would be incorrectly labeled if labeled according to the distribution of labels in the subset."
+        },
+        {
+            "id": "ml-15",
+            "question": "What is the purpose of a confusion matrix?",
+            "options": [
+                "To show which variables are correlated",
+                "To summarize prediction results against true labels",
+                "To plot model accuracy over time",
+                "To display feature importance"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A confusion matrix shows true positives, false positives, true negatives, and false negatives, enabling calculation of precision, recall, and F1."
         }
     ],
     "programming": [
@@ -497,6 +575,19 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "filter() keeps rows where the condition is TRUE; select() chooses columns; mutate() adds new columns."
+        },
+        {
+            "id": "prog-r-5",
+            "question": "What does `purrr::map()` do in the tidyverse?",
+            "options": [
+                "Creates a visual map of the data",
+                "Applies a function to each element of a list or vector",
+                "Filters rows based on a condition",
+                "Joins two data frames"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`map()` from the purrr package applies a function to each element of a list or vector, returning a list of results."
         }
     ],
     "data_manipulation": [
@@ -655,6 +746,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "pivot_table() summarizes and aggregates data by grouping rows and columns into a matrix."
+        },
+        {
+            "id": "dm-13",
+            "question": "Which SQL function returns the first non-NULL value in a list?",
+            "options": [
+                "COALESCE",
+                "NVL",
+                "ISNULL",
+                "IFNULL"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "COALESCE returns the first non-NULL expression among its arguments; it is standard SQL and supports multiple arguments."
+        },
+        {
+            "id": "dm-14",
+            "question": "What does `pd.melt()` do in pandas?",
+            "options": [
+                "Sorts the DataFrame by index",
+                "Reshapes wide-format data to long format",
+                "Removes duplicate rows",
+                "Merges two DataFrames on a key"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`melt()` unpivots a DataFrame from wide to long format, useful for tidying data."
         }
     ],
     "mathematics": [
@@ -800,6 +917,19 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "An excessively large learning rate can overshoot the minimum, causing oscillation or divergence."
+        },
+        {
+            "id": "math-12",
+            "question": "What is the rank of a matrix?",
+            "options": [
+                "The number of non-zero eigenvalues",
+                "The maximum number of linearly independent rows or columns",
+                "The sum of diagonal elements",
+                "The determinant of the matrix"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Matrix rank is the dimension of the vector space spanned by its rows or columns—the maximum number of linearly independent row/column vectors."
         }
     ],
     "domain_knowledge": [
@@ -945,6 +1075,19 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Deployment delivers the trained model into a production environment where it can generate value."
+        },
+        {
+            "id": "domain-12",
+            "question": "What is the primary purpose of a data dictionary?",
+            "options": [
+                "Store the actual data values",
+                "Document metadata: definitions, types, and constraints for data elements",
+                "Encrypt sensitive columns",
+                "Automate ETL pipelines"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A data dictionary describes each data element: name, type, format, constraints, and business meaning."
         }
     ],
     "data_engineering": [
@@ -1090,6 +1233,19 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "A data contract is an agreement on data structure, semantics, and quality between upstream producers and downstream consumers."
+        },
+        {
+            "id": "de-12",
+            "question": "What is \"schema drift\"?",
+            "options": [
+                "Intentionally changing a database schema",
+                "Unplanned or undetected changes in data structure over time",
+                "Moving data between schemas",
+                "Backing up schema definitions"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Schema drift occurs when upstream data sources change structure (add/remove/rename columns) without downstream systems being updated, causing pipeline failures."
         }
     ],
     "data_visualization": [
@@ -1235,6 +1391,19 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Colorblind-safe palettes avoid problematic red-green pairings so all viewers can interpret the chart."
+        },
+        {
+            "id": "dv-12",
+            "question": "When is a logarithmic scale most appropriate on a chart axis?",
+            "options": [
+                "When data spans several orders of magnitude",
+                "When all values are negative",
+                "When comparing categories",
+                "When the data is uniformly distributed"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Log scales compress large ranges, making exponential growth or multi-magnitude data readable (e.g., 1, 10, 100, 1000)."
         }
     ],
     "ethics_governance": [
@@ -1380,6 +1549,19 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Pre-processing techniques such as re-weighting or re-sampling can reduce bias before the model sees the data."
+        },
+        {
+            "id": "eg-12",
+            "question": "What is \"algorithmic transparency\"?",
+            "options": [
+                "Making source code open source",
+                "Making the decision process of an algorithm understandable and inspectable",
+                "Removing all randomness from the model",
+                "Publishing the training data"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Algorithmic transparency means stakeholders can understand how and why an algorithm makes decisions, enabling accountability and audit."
         }
     ],
     "llm_ai_agents": [
@@ -1447,6 +1629,84 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Plan-and-execute agents decompose a goal into steps, then invoke tools to complete each step sequentially."
+        },
+        {
+            "id": "llm-ai-agents-6",
+            "question": "What is the purpose of a system prompt in an LLM application?",
+            "options": [
+                "To encrypt user data",
+                "To define the model's role, behavior, and constraints for the conversation",
+                "To log all user interactions",
+                "To fine-tune the model on the fly"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A system prompt sets the model's persona, rules, and boundaries before any user interaction, guiding all subsequent responses."
+        },
+        {
+            "id": "llm-ai-agents-7",
+            "question": "In RAG (Retrieval-Augmented Generation), what is \"chunking\"?",
+            "options": [
+                "Compressing the model weights",
+                "Splitting source documents into smaller segments for embedding and retrieval",
+                "Combining multiple user queries into one",
+                "Removing stop words from the prompt"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Chunking breaks long documents into manageable pieces so relevant sections can be embedded, indexed, and retrieved efficiently."
+        },
+        {
+            "id": "llm-ai-agents-8",
+            "question": "What is \"tool use\" in the context of LLM agents?",
+            "options": [
+                "Using a hammer to fix the server",
+                "The model invoking external functions (APIs, code execution, search) to accomplish tasks",
+                "Training the model on tool documentation",
+                "Measuring model latency"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Tool use allows LLMs to call external functions—search, code execution, database queries—extending their capabilities beyond static knowledge."
+        },
+        {
+            "id": "llm-ai-agents-9",
+            "question": "What is a key risk of \"hallucination\" in LLM outputs?",
+            "options": [
+                "The model runs too slowly",
+                "The model generates plausible-sounding but factually incorrect information",
+                "The model refuses to answer",
+                "The model outputs only code"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Hallucination is when an LLM confidently produces false or fabricated information; grounding via RAG and verification mitigates this risk."
+        },
+        {
+            "id": "llm-ai-agents-10",
+            "question": "What does \"few-shot prompting\" mean?",
+            "options": [
+                "Prompting the model with very few words",
+                "Providing a small number of examples in the prompt to guide the model's behavior",
+                "Using a small model instead of a large one",
+                "Limiting the number of tokens in the response"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Few-shot prompting includes 2–5 input–output examples in the prompt to steer the model toward the desired format or reasoning pattern."
+        },
+        {
+            "id": "llm-ai-agents-11",
+            "question": "What is a key limitation of zero-shot prompting?",
+            "options": [
+                "It requires no input",
+                "Performance depends heavily on the model's pre-trained knowledge and prompt quality",
+                "It always produces incorrect answers",
+                "It only works with images"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Zero-shot prompts provide no examples, so accuracy depends on how well the model understands the task from the description alone."
         }
     ]
 }
