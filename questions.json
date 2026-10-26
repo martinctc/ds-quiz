@@ -194,6 +194,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Statistical significance (e.g., p < 0.05) indicates the result is unlikely to occur by random chance alone under the null hypothesis; it does not imply practical importance."
+        },
+        {
+            "id": "stats-20",
+            "question": "What is Type II error?",
+            "options": [
+                "False positive",
+                "False negative",
+                "Type I error",
+                "Sampling bias"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Type II error is failing to reject a false null hypothesis (false negative)."
+        },
+        {
+            "id": "stats-21",
+            "question": "What does skewness describe?",
+            "options": [
+                "Mean value",
+                "Asymmetry of distribution",
+                "Standard deviation",
+                "Correlation"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Skewness measures how much a distribution deviates from symmetry."
         }
     ],
     "machine_learning": [
@@ -391,6 +417,32 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "A confusion matrix shows true positives, false positives, true negatives, and false negatives, enabling calculation of precision, recall, and F1."
+        },
+        {
+            "id": "ml-20",
+            "question": "What does dropout do in neural networks?",
+            "options": [
+                "Adds parameters",
+                "Randomly deactivates neurons during training",
+                "Removes layers",
+                "Sets weights to zero permanently"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Dropout randomly sets a fraction of neuron outputs to zero during training to prevent co-adaptation."
+        },
+        {
+            "id": "ml-21",
+            "question": "What is a hyperparameter?",
+            "options": [
+                "Model prediction",
+                "A setting configured before training (e.g., learning rate)",
+                "A feature value",
+                "A label"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Hyperparameters are configuration variables set by the practitioner, not learned from data."
         }
     ],
     "programming": [
@@ -588,6 +640,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "`map()` from the purrr package applies a function to each element of a list or vector, returning a list of results."
+        },
+        {
+            "id": "prog-20",
+            "question": "What does the Python `len()` function return?",
+            "options": [
+                "Memory size",
+                "Number of elements",
+                "Data type",
+                "First index"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "`len()` returns the count of elements in a sequence or collection."
+        },
+        {
+            "id": "prog-21",
+            "question": "Which Python structure is immutable?",
+            "options": [
+                "List",
+                "Set",
+                "Tuple",
+                "Dict"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "Tuples are immutable; lists, sets, and dicts are mutable."
         }
     ],
     "data_manipulation": [
@@ -772,6 +850,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "`melt()` unpivots a DataFrame from wide to long format, useful for tidying data."
+        },
+        {
+            "id": "dm-20",
+            "question": "Which SQL operation combines rows from two tables using matching values?",
+            "options": [
+                "JOIN",
+                "UNION",
+                "INTERSECT",
+                "EXCEPT"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "JOIN matches rows across tables based on a common key."
+        },
+        {
+            "id": "dm-21",
+            "question": "In pandas, which method selects rows by label?",
+            "options": [
+                "iloc",
+                "loc",
+                "filter",
+                "map"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`loc` selects by index label, while `iloc` selects by integer position."
         }
     ],
     "mathematics": [
@@ -930,6 +1034,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Matrix rank is the dimension of the vector space spanned by its rows or columns—the maximum number of linearly independent row/column vectors."
+        },
+        {
+            "id": "math-20",
+            "question": "What is the slope of a line y = mx + b?",
+            "options": [
+                "m",
+                "b",
+                "x",
+                "y"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "In y = mx + b, m is the slope and b is the y-intercept."
+        },
+        {
+            "id": "math-21",
+            "question": "Which series is the sum of the first n integers?",
+            "options": [
+                "Geometric",
+                "Arithmetic",
+                "Harmonic",
+                "Factorial"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The sequence 1, 3, 6, 10... is arithmetic in differences."
         }
     ],
     "domain_knowledge": [
@@ -1088,6 +1218,32 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "A data dictionary describes each data element: name, type, format, constraints, and business meaning."
+        },
+        {
+            "id": "domain-20",
+            "question": "What is the difference between correlation and causation?",
+            "options": [
+                "None",
+                "Correlation implies causation",
+                "Causation implies correlation",
+                "They are unrelated"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "Causation implies correlation, but correlation alone does not prove causation."
+        },
+        {
+            "id": "domain-21",
+            "question": "What is data product management?",
+            "options": [
+                "Writing SQL",
+                "Building data-driven products with business goals",
+                "Cleaning data",
+                "Storing data"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Data product management focuses on delivering data products aligned to business outcomes."
         }
     ],
     "data_engineering": [
@@ -1246,6 +1402,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Schema drift occurs when upstream data sources change structure (add/remove/rename columns) without downstream systems being updated, causing pipeline failures."
+        },
+        {
+            "id": "de-20",
+            "question": "What is a data pipeline?",
+            "options": [
+                "A database index",
+                "A sequence of data processing steps",
+                "A chart type",
+                "A data format"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A pipeline is the automated flow from ingestion through transformation to destination."
+        },
+        {
+            "id": "de-21",
+            "question": "What is idempotency?",
+            "options": [
+                "Speed",
+                "Same result when run multiple times",
+                "Always using same code",
+                "No errors"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Idempotent operations can be safely repeated without changing the system state."
         }
     ],
     "data_visualization": [
@@ -1404,6 +1586,32 @@
             "correctAnswer": 0,
             "difficulty": "medium",
             "explanation": "Log scales compress large ranges, making exponential growth or multi-magnitude data readable (e.g., 1, 10, 100, 1000)."
+        },
+        {
+            "id": "dv-20",
+            "question": "When should log scales be avoided?",
+            "options": [
+                "When comparing small ranges",
+                "When comparing percentages",
+                "For exponential growth",
+                "When range spans orders of magnitude"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Log scales can mislead when the range is small or includes zero/negative."
+        },
+        {
+            "id": "dv-21",
+            "question": "Which chart shows a single value over time?",
+            "options": [
+                "Pie chart",
+                "Line chart",
+                "Bar chart",
+                "Scatter plot"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A line chart is ideal for time-series trends."
         }
     ],
     "ethics_governance": [
@@ -1562,6 +1770,32 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Algorithmic transparency means stakeholders can understand how and why an algorithm makes decisions, enabling accountability and audit."
+        },
+        {
+            "id": "eg-20",
+            "question": "Which of these is a fairness metric?",
+            "options": [
+                "Accuracy",
+                "Demographic parity",
+                "F1 score",
+                "MAE"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Demographic parity requires equal positive rates across groups."
+        },
+        {
+            "id": "eg-21",
+            "question": "What is consent withdrawal?",
+            "options": [
+                "Canceling a project",
+                "Withdrawing permission for data use",
+                "Deleting data",
+                "Changing settings"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Consent withdrawal lets individuals revoke permission to use their data."
         }
     ],
     "llm_ai_agents": [
@@ -1707,6 +1941,32 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Zero-shot prompts provide no examples, so accuracy depends on how well the model understands the task from the description alone."
+        },
+        {
+            "id": "llm-ai-agents-20",
+            "question": "What is a \"system prompt\"?",
+            "options": [
+                "A hardware prompt",
+                "Instructions defining model behavior",
+                "A user message",
+                "A database query"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "System prompts set the model role, rules, and constraints."
+        },
+        {
+            "id": "llm-ai-agents-21",
+            "question": "What is an agent loop?",
+            "options": [
+                "A loop in code",
+                "Observe-think-act cycle",
+                "A data loop",
+                "A training loop"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Agent loops consist of observation, planning/thinking, and action/tool use."
         }
     ]
 }
