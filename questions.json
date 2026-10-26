@@ -393,6 +393,45 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "A virtual environment provides an isolated Python installation and package set, preventing dependency conflicts between projects."
+        },
+        {
+            "id": "prog-r-1",
+            "question": "What is the purpose of the <- operator in R?",
+            "options": [
+                "To compare two variables",
+                "To assign a value to a variable (correct)",
+                "To declare a function",
+                "To create a loop"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "In R, <- is the standard assignment operator. = can also assign, but <- is preferred for variable assignment."
+        },
+        {
+            "id": "prog-r-2",
+            "question": "Which R package provides the tibble data structure?",
+            "options": [
+                "data.table",
+                "dplyr / tidyverse (correct)",
+                "base R",
+                "ggplot2"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "The tibble structure is part of the tidyverse ecosystem (tibble package), providing a modern alternative to base R data frames."
+        },
+        {
+            "id": "prog-r-3",
+            "question": "In R, what does mean(..., na.rm = TRUE) do?",
+            "options": [
+                "Removes rows with NA values before computing the mean (correct)",
+                "Replaces NA with TRUE",
+                "Returns NA always",
+                "Returns zero when NA is present"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "na.rm = TRUE ignores NA values so the mean is computed on the remaining observations."
         }
     ],
     "data_manipulation": [
@@ -565,7 +604,7 @@
             ],
             "correctAnswer": 1,
             "difficulty": "easy",
-            "explanation": "∫ 1/(1+x^2) dx = arctan(x) + C."
+            "explanation": "\u222b 1/(1+x^2) dx = arctan(x) + C."
         },
         {
             "id": "math-4",
@@ -1185,6 +1224,47 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Documenting and escalating a known harm enables informed decisions about mitigation, deployment, and accountability."
+        }
+    ],
+    "llm_ai_agents": [
+        {
+            "id": "llm-ai-agents-1",
+            "question": "What is the primary purpose of Retrieval-Augmented Generation (RAG)?",
+            "options": [
+                "To replace the user's database with a vector store",
+                "To ground an LLM's responses in external documents (correct)",
+                "To make prompts shorter",
+                "To fine-tune the model faster"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "RAG retrieves relevant external documents and injects them into the prompt, allowing the model to reference facts it was not trained on."
+        },
+        {
+            "id": "llm-ai-agents-2",
+            "question": "In an agentic workflow, what does the observability layer typically provide?",
+            "options": [
+                "Real-time token pricing",
+                "Visibility into agent actions, errors, and state changes (correct)",
+                "A replacement for logging",
+                "Encryption of prompts"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Observability lets engineers see what an agent decided, which tool it called, and whether errors occurred\u2014critical for debugging and governance."
+        },
+        {
+            "id": "llm-ai-agents-3",
+            "question": "Which of the following is a key challenge when deploying LLM agents in production?",
+            "options": [
+                "Reducing GPU usage",
+                "Managing non-deterministic outputs and ensuring reproducible results (correct)",
+                "Removing the need for prompts",
+                "Making models smaller"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "hard",
+            "explanation": "Because LLM outputs vary with temperature, top-p, and model versions, maintaining reproducible and auditable agent behavior requires logging, seeding, and guardrails."
         }
     ]
 }
