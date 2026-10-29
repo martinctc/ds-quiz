@@ -129,6 +129,97 @@
             "correctAnswer": 2,
             "difficulty": "easy",
             "explanation": "The binomial distribution gives the probability of a number of successes in a fixed number of independent trials, each with the same success probability."
+        },
+        {
+            "id": "statistics-11",
+            "question": "What does statistical power measure?",
+            "options": [
+                "Probability of correctly rejecting a false null hypothesis",
+                "Probability of a Type I error",
+                "Width of a confidence interval",
+                "Effect size of the treatment"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Power is the probability of detecting an effect when one truly exists (1 − beta)."
+        },
+        {
+            "id": "statistics-12",
+            "question": "How does increasing sample size affect the width of a confidence interval?",
+            "options": [
+                "It makes the interval wider",
+                "It makes the interval narrower",
+                "It has no effect",
+                "It centers the interval at zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Larger samples reduce standard error, producing narrower confidence intervals."
+        },
+        {
+            "id": "statistics-13",
+            "question": "What does a 99% confidence interval imply compared to a 95% interval?",
+            "options": [
+                "It is narrower",
+                "It is wider",
+                "It has the same width",
+                "It is always centered at zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A higher confidence level requires a wider interval to capture the true parameter with greater certainty."
+        },
+        {
+            "id": "statistics-14",
+            "question": "When comparing two population proportions, which test is appropriate?",
+            "options": [
+                "One-sample t-test",
+                "Two-proportion z-test",
+                "Paired t-test",
+                "Chi-square goodness-of-fit"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The two-proportion z-test evaluates whether the difference between two sample proportions is statistically significant."
+        },
+        {
+            "id": "statistics-15",
+            "question": "What does statistical significance tell us?",
+            "options": [
+                "The effect is practically important",
+                "The observed result is unlikely under the null hypothesis",
+                "The sample is large enough",
+                "The model has no errors"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Statistical significance (e.g., p < 0.05) indicates the result is unlikely to occur by random chance alone under the null hypothesis; it does not imply practical importance."
+        },
+        {
+            "id": "stats-20",
+            "question": "What is Type II error?",
+            "options": [
+                "False positive",
+                "False negative",
+                "Type I error",
+                "Sampling bias"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Type II error is failing to reject a false null hypothesis (false negative)."
+        },
+        {
+            "id": "stats-21",
+            "question": "What does skewness describe?",
+            "options": [
+                "Mean value",
+                "Asymmetry of distribution",
+                "Standard deviation",
+                "Correlation"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Skewness measures how much a distribution deviates from symmetry."
         }
     ],
     "machine_learning": [
@@ -261,6 +352,97 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "A higher threshold makes positive predictions more conservative: fewer items are flagged, so precision tends to rise while recall falls."
+        },
+        {
+            "id": "ml-11",
+            "question": "Which describes the bias-variance tradeoff?",
+            "options": [
+                "Higher model complexity reduces bias but increases variance",
+                "Higher model complexity reduces both bias and variance",
+                "Higher model complexity increases bias but reduces variance",
+                "Model complexity has no effect on bias or variance"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "As model complexity grows, bias typically falls while variance rises, creating the tradeoff."
+        },
+        {
+            "id": "ml-12",
+            "question": "What is the purpose of SHAP values?",
+            "options": [
+                "To compress the training dataset",
+                "To attribute feature contributions to individual predictions",
+                "To tune hyperparameters automatically",
+                "To remove correlated features"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "SHAP (SHapley Additive exPlanations) assigns each feature an importance value for a specific prediction."
+        },
+        {
+            "id": "ml-13",
+            "question": "What does the F1-score represent?",
+            "options": [
+                "The arithmetic mean of precision and recall",
+                "The harmonic mean of precision and recall",
+                "The geometric mean of precision and recall",
+                "The ratio of precision to recall"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "F1 = 2 × (precision × recall) / (precision + recall), balancing both metrics when classes are imbalanced."
+        },
+        {
+            "id": "ml-14",
+            "question": "In a decision tree, what does the Gini impurity measure?",
+            "options": [
+                "Depth of the tree",
+                "Probability of misclassifying a randomly chosen element",
+                "Number of leaf nodes",
+                "Correlation between features"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Gini impurity measures how often a randomly chosen element would be incorrectly labeled if labeled according to the distribution of labels in the subset."
+        },
+        {
+            "id": "ml-15",
+            "question": "What is the purpose of a confusion matrix?",
+            "options": [
+                "To show which variables are correlated",
+                "To summarize prediction results against true labels",
+                "To plot model accuracy over time",
+                "To display feature importance"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A confusion matrix shows true positives, false positives, true negatives, and false negatives, enabling calculation of precision, recall, and F1."
+        },
+        {
+            "id": "ml-20",
+            "question": "What does dropout do in neural networks?",
+            "options": [
+                "Adds parameters",
+                "Randomly deactivates neurons during training",
+                "Removes layers",
+                "Sets weights to zero permanently"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Dropout randomly sets a fraction of neuron outputs to zero during training to prevent co-adaptation."
+        },
+        {
+            "id": "ml-21",
+            "question": "What is a hyperparameter?",
+            "options": [
+                "Model prediction",
+                "A setting configured before training (e.g., learning rate)",
+                "A feature value",
+                "A label"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Hyperparameters are configuration variables set by the practitioner, not learned from data."
         }
     ],
     "programming": [
@@ -432,6 +614,58 @@
             "correctAnswer": 0,
             "difficulty": "medium",
             "explanation": "na.rm = TRUE ignores NA values so the mean is computed on the remaining observations."
+        },
+        {
+            "id": "prog-r-4",
+            "question": "Which tidyverse verb filters rows based on a condition in R?",
+            "options": [
+                "select()",
+                "filter()",
+                "mutate()",
+                "arrange()"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "filter() keeps rows where the condition is TRUE; select() chooses columns; mutate() adds new columns."
+        },
+        {
+            "id": "prog-r-5",
+            "question": "What does `purrr::map()` do in the tidyverse?",
+            "options": [
+                "Creates a visual map of the data",
+                "Applies a function to each element of a list or vector",
+                "Filters rows based on a condition",
+                "Joins two data frames"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`map()` from the purrr package applies a function to each element of a list or vector, returning a list of results."
+        },
+        {
+            "id": "prog-20",
+            "question": "What does the Python `len()` function return?",
+            "options": [
+                "Memory size",
+                "Number of elements",
+                "Data type",
+                "First index"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "`len()` returns the count of elements in a sequence or collection."
+        },
+        {
+            "id": "prog-21",
+            "question": "Which Python structure is immutable?",
+            "options": [
+                "List",
+                "Set",
+                "Tuple",
+                "Dict"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "Tuples are immutable; lists, sets, and dicts are mutable."
         }
     ],
     "data_manipulation": [
@@ -564,6 +798,84 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Joining on a non-unique key creates a row for every matching pair, which can multiply row counts."
+        },
+        {
+            "id": "dm-11",
+            "question": "Which SQL clause is used with window functions to define the set of rows?",
+            "options": [
+                "GROUP BY",
+                "OVER",
+                "HAVING",
+                "PARTITION"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The OVER() clause defines the window or partitioning for window functions like ROW_NUMBER()."
+        },
+        {
+            "id": "dm-12",
+            "question": "What does pandas.pivot_table() primarily do?",
+            "options": [
+                "Sorts rows by index",
+                "Aggregates values into a spreadsheet-like table",
+                "Removes duplicate columns",
+                "Fills missing values with zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "pivot_table() summarizes and aggregates data by grouping rows and columns into a matrix."
+        },
+        {
+            "id": "dm-13",
+            "question": "Which SQL function returns the first non-NULL value in a list?",
+            "options": [
+                "COALESCE",
+                "NVL",
+                "ISNULL",
+                "IFNULL"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "COALESCE returns the first non-NULL expression among its arguments; it is standard SQL and supports multiple arguments."
+        },
+        {
+            "id": "dm-14",
+            "question": "What does `pd.melt()` do in pandas?",
+            "options": [
+                "Sorts the DataFrame by index",
+                "Reshapes wide-format data to long format",
+                "Removes duplicate rows",
+                "Merges two DataFrames on a key"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`melt()` unpivots a DataFrame from wide to long format, useful for tidying data."
+        },
+        {
+            "id": "dm-20",
+            "question": "Which SQL operation combines rows from two tables using matching values?",
+            "options": [
+                "JOIN",
+                "UNION",
+                "INTERSECT",
+                "EXCEPT"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "JOIN matches rows across tables based on a common key."
+        },
+        {
+            "id": "dm-21",
+            "question": "In pandas, which method selects rows by label?",
+            "options": [
+                "iloc",
+                "loc",
+                "filter",
+                "map"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "`loc` selects by index label, while `iloc` selects by integer position."
         }
     ],
     "mathematics": [
@@ -604,7 +916,7 @@
             ],
             "correctAnswer": 1,
             "difficulty": "easy",
-            "explanation": "\u222b 1/(1+x^2) dx = arctan(x) + C."
+            "explanation": "∫ 1/(1+x^2) dx = arctan(x) + C."
         },
         {
             "id": "math-4",
@@ -696,6 +1008,58 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Independence means the joint probability factorizes: P(A and B) = P(A) * P(B)."
+        },
+        {
+            "id": "math-11",
+            "question": "If the learning rate in gradient descent is too large, what typically happens?",
+            "options": [
+                "Convergence is slower but stable",
+                "The loss may oscillate or diverge",
+                "The model becomes immune to local minima",
+                "Gradients are always clipped to zero"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "An excessively large learning rate can overshoot the minimum, causing oscillation or divergence."
+        },
+        {
+            "id": "math-12",
+            "question": "What is the rank of a matrix?",
+            "options": [
+                "The number of non-zero eigenvalues",
+                "The maximum number of linearly independent rows or columns",
+                "The sum of diagonal elements",
+                "The determinant of the matrix"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Matrix rank is the dimension of the vector space spanned by its rows or columns—the maximum number of linearly independent row/column vectors."
+        },
+        {
+            "id": "math-20",
+            "question": "What is the slope of a line y = mx + b?",
+            "options": [
+                "m",
+                "b",
+                "x",
+                "y"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "easy",
+            "explanation": "In y = mx + b, m is the slope and b is the y-intercept."
+        },
+        {
+            "id": "math-21",
+            "question": "Which series is the sum of the first n integers?",
+            "options": [
+                "Geometric",
+                "Arithmetic",
+                "Harmonic",
+                "Factorial"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "The sequence 1, 3, 6, 10... is arithmetic in differences."
         }
     ],
     "domain_knowledge": [
@@ -828,6 +1192,58 @@
             "correctAnswer": 1,
             "difficulty": "easy",
             "explanation": "Non-technical audiences need the business implication first, supported by clear language and visuals rather than technical detail."
+        },
+        {
+            "id": "domain-11",
+            "question": "In CRISP-DM, what is the main focus of the Deployment phase?",
+            "options": [
+                "Collecting raw data",
+                "Putting the model into production for end users",
+                "Splitting data into train and test sets",
+                "Choosing hyperparameters"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Deployment delivers the trained model into a production environment where it can generate value."
+        },
+        {
+            "id": "domain-12",
+            "question": "What is the primary purpose of a data dictionary?",
+            "options": [
+                "Store the actual data values",
+                "Document metadata: definitions, types, and constraints for data elements",
+                "Encrypt sensitive columns",
+                "Automate ETL pipelines"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A data dictionary describes each data element: name, type, format, constraints, and business meaning."
+        },
+        {
+            "id": "domain-20",
+            "question": "What is the difference between correlation and causation?",
+            "options": [
+                "None",
+                "Correlation implies causation",
+                "Causation implies correlation",
+                "They are unrelated"
+            ],
+            "correctAnswer": 2,
+            "difficulty": "easy",
+            "explanation": "Causation implies correlation, but correlation alone does not prove causation."
+        },
+        {
+            "id": "domain-21",
+            "question": "What is data product management?",
+            "options": [
+                "Writing SQL",
+                "Building data-driven products with business goals",
+                "Cleaning data",
+                "Storing data"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Data product management focuses on delivering data products aligned to business outcomes."
         }
     ],
     "data_engineering": [
@@ -960,6 +1376,58 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Exponential backoff increases the delay between retries, giving a failing dependency time to recover instead of overwhelming it."
+        },
+        {
+            "id": "de-11",
+            "question": "What is a data contract primarily used for?",
+            "options": [
+                "Encrypting data at rest",
+                "Defining schema and quality expectations between data producers and consumers",
+                "Replacing ETL pipelines entirely",
+                "Compressing data for storage"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "A data contract is an agreement on data structure, semantics, and quality between upstream producers and downstream consumers."
+        },
+        {
+            "id": "de-12",
+            "question": "What is \"schema drift\"?",
+            "options": [
+                "Intentionally changing a database schema",
+                "Unplanned or undetected changes in data structure over time",
+                "Moving data between schemas",
+                "Backing up schema definitions"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Schema drift occurs when upstream data sources change structure (add/remove/rename columns) without downstream systems being updated, causing pipeline failures."
+        },
+        {
+            "id": "de-20",
+            "question": "What is a data pipeline?",
+            "options": [
+                "A database index",
+                "A sequence of data processing steps",
+                "A chart type",
+                "A data format"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A pipeline is the automated flow from ingestion through transformation to destination."
+        },
+        {
+            "id": "de-21",
+            "question": "What is idempotency?",
+            "options": [
+                "Speed",
+                "Same result when run multiple times",
+                "Always using same code",
+                "No errors"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Idempotent operations can be safely repeated without changing the system state."
         }
     ],
     "data_visualization": [
@@ -1092,6 +1560,58 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Introduced by Edward Tufte, the data-ink ratio encourages removing non-data ink so the chart communicates as efficiently as possible."
+        },
+        {
+            "id": "dv-11",
+            "question": "Why use colorblind-safe palettes in charts?",
+            "options": [
+                "They make charts print faster",
+                "They ensure information is distinguishable for people with color vision deficiency",
+                "They reduce file size",
+                "They are required by law"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Colorblind-safe palettes avoid problematic red-green pairings so all viewers can interpret the chart."
+        },
+        {
+            "id": "dv-12",
+            "question": "When is a logarithmic scale most appropriate on a chart axis?",
+            "options": [
+                "When data spans several orders of magnitude",
+                "When all values are negative",
+                "When comparing categories",
+                "When the data is uniformly distributed"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Log scales compress large ranges, making exponential growth or multi-magnitude data readable (e.g., 1, 10, 100, 1000)."
+        },
+        {
+            "id": "dv-20",
+            "question": "When should log scales be avoided?",
+            "options": [
+                "When comparing small ranges",
+                "When comparing percentages",
+                "For exponential growth",
+                "When range spans orders of magnitude"
+            ],
+            "correctAnswer": 0,
+            "difficulty": "medium",
+            "explanation": "Log scales can mislead when the range is small or includes zero/negative."
+        },
+        {
+            "id": "dv-21",
+            "question": "Which chart shows a single value over time?",
+            "options": [
+                "Pie chart",
+                "Line chart",
+                "Bar chart",
+                "Scatter plot"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A line chart is ideal for time-series trends."
         }
     ],
     "ethics_governance": [
@@ -1224,6 +1744,58 @@
             "correctAnswer": 1,
             "difficulty": "medium",
             "explanation": "Documenting and escalating a known harm enables informed decisions about mitigation, deployment, and accountability."
+        },
+        {
+            "id": "eg-11",
+            "question": "Which approach reduces algorithmic bias before model training?",
+            "options": [
+                "Collecting only majority-group data",
+                "Pre-processing the training data to balance representation",
+                "Removing the test set",
+                "Increasing the learning rate"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Pre-processing techniques such as re-weighting or re-sampling can reduce bias before the model sees the data."
+        },
+        {
+            "id": "eg-12",
+            "question": "What is \"algorithmic transparency\"?",
+            "options": [
+                "Making source code open source",
+                "Making the decision process of an algorithm understandable and inspectable",
+                "Removing all randomness from the model",
+                "Publishing the training data"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Algorithmic transparency means stakeholders can understand how and why an algorithm makes decisions, enabling accountability and audit."
+        },
+        {
+            "id": "eg-20",
+            "question": "Which of these is a fairness metric?",
+            "options": [
+                "Accuracy",
+                "Demographic parity",
+                "F1 score",
+                "MAE"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Demographic parity requires equal positive rates across groups."
+        },
+        {
+            "id": "eg-21",
+            "question": "What is consent withdrawal?",
+            "options": [
+                "Canceling a project",
+                "Withdrawing permission for data use",
+                "Deleting data",
+                "Changing settings"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Consent withdrawal lets individuals revoke permission to use their data."
         }
     ],
     "llm_ai_agents": [
@@ -1251,7 +1823,7 @@
             ],
             "correctAnswer": 1,
             "difficulty": "hard",
-            "explanation": "Observability lets engineers see what an agent decided, which tool it called, and whether errors occurred\u2014critical for debugging and governance."
+            "explanation": "Observability lets engineers see what an agent decided, which tool it called, and whether errors occurred—critical for debugging and governance."
         },
         {
             "id": "llm-ai-agents-3",
@@ -1265,6 +1837,136 @@
             "correctAnswer": 1,
             "difficulty": "hard",
             "explanation": "Because LLM outputs vary with temperature, top-p, and model versions, maintaining reproducible and auditable agent behavior requires logging, seeding, and guardrails."
+        },
+        {
+            "id": "llm-ai-agents-4",
+            "question": "What is prompt injection?",
+            "options": [
+                "Adding more tokens to a prompt",
+                "Manipulating an LLM via malicious user input to override its instructions",
+                "Fine-tuning on synthetic data",
+                "Encrypting model weights"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Prompt injection occurs when user input tricks the model into ignoring its system instructions and performing unintended actions."
+        },
+        {
+            "id": "llm-ai-agents-5",
+            "question": "In an agentic workflow, what does “plan-and-execute” mean?",
+            "options": [
+                "The agent generates a final answer immediately",
+                "The agent first creates a plan of steps, then carries them out with tool use",
+                "The agent only summarizes text",
+                "The agent trains its own weights"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Plan-and-execute agents decompose a goal into steps, then invoke tools to complete each step sequentially."
+        },
+        {
+            "id": "llm-ai-agents-6",
+            "question": "What is the purpose of a system prompt in an LLM application?",
+            "options": [
+                "To encrypt user data",
+                "To define the model's role, behavior, and constraints for the conversation",
+                "To log all user interactions",
+                "To fine-tune the model on the fly"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "A system prompt sets the model's persona, rules, and boundaries before any user interaction, guiding all subsequent responses."
+        },
+        {
+            "id": "llm-ai-agents-7",
+            "question": "In RAG (Retrieval-Augmented Generation), what is \"chunking\"?",
+            "options": [
+                "Compressing the model weights",
+                "Splitting source documents into smaller segments for embedding and retrieval",
+                "Combining multiple user queries into one",
+                "Removing stop words from the prompt"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Chunking breaks long documents into manageable pieces so relevant sections can be embedded, indexed, and retrieved efficiently."
+        },
+        {
+            "id": "llm-ai-agents-8",
+            "question": "What is \"tool use\" in the context of LLM agents?",
+            "options": [
+                "Using a hammer to fix the server",
+                "The model invoking external functions (APIs, code execution, search) to accomplish tasks",
+                "Training the model on tool documentation",
+                "Measuring model latency"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Tool use allows LLMs to call external functions—search, code execution, database queries—extending their capabilities beyond static knowledge."
+        },
+        {
+            "id": "llm-ai-agents-9",
+            "question": "What is a key risk of \"hallucination\" in LLM outputs?",
+            "options": [
+                "The model runs too slowly",
+                "The model generates plausible-sounding but factually incorrect information",
+                "The model refuses to answer",
+                "The model outputs only code"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Hallucination is when an LLM confidently produces false or fabricated information; grounding via RAG and verification mitigates this risk."
+        },
+        {
+            "id": "llm-ai-agents-10",
+            "question": "What does \"few-shot prompting\" mean?",
+            "options": [
+                "Prompting the model with very few words",
+                "Providing a small number of examples in the prompt to guide the model's behavior",
+                "Using a small model instead of a large one",
+                "Limiting the number of tokens in the response"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Few-shot prompting includes 2–5 input–output examples in the prompt to steer the model toward the desired format or reasoning pattern."
+        },
+        {
+            "id": "llm-ai-agents-11",
+            "question": "What is a key limitation of zero-shot prompting?",
+            "options": [
+                "It requires no input",
+                "Performance depends heavily on the model's pre-trained knowledge and prompt quality",
+                "It always produces incorrect answers",
+                "It only works with images"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "Zero-shot prompts provide no examples, so accuracy depends on how well the model understands the task from the description alone."
+        },
+        {
+            "id": "llm-ai-agents-20",
+            "question": "What is a \"system prompt\"?",
+            "options": [
+                "A hardware prompt",
+                "Instructions defining model behavior",
+                "A user message",
+                "A database query"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "easy",
+            "explanation": "System prompts set the model role, rules, and constraints."
+        },
+        {
+            "id": "llm-ai-agents-21",
+            "question": "What is an agent loop?",
+            "options": [
+                "A loop in code",
+                "Observe-think-act cycle",
+                "A data loop",
+                "A training loop"
+            ],
+            "correctAnswer": 1,
+            "difficulty": "medium",
+            "explanation": "Agent loops consist of observation, planning/thinking, and action/tool use."
         }
     ]
 }
