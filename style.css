@@ -352,6 +352,13 @@ a {
     font-size: 0.9rem;
 }
 
+.welcome-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
 .primary-btn,
 .secondary-btn {
     border: none;
@@ -642,6 +649,11 @@ a {
     background-color: #f9fafb;
     display: grid;
     gap: 0.5rem;
+}
+
+.score-item.focus {
+    border-color: rgba(249, 115, 22, 0.6);
+    background-color: rgba(249, 115, 22, 0.05);
 }
 
 .score-item-header {
