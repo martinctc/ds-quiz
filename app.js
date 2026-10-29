@@ -1,5 +1,6 @@
 'use strict';
 
+const ACTIVE_SESSION_KEY = 'ds-quiz:active-session:v1';
 const HISTORY_STORAGE_KEY = 'ds-quiz:attempts:v1';
 const ADMIN_STORAGE_KEY = 'ds-quiz:admin-questions:v1';
 const DEFAULT_HISTORY_LIMIT = 20;
@@ -48,6 +49,7 @@ function cacheDom() {
     dom.configSummary = document.getElementById('config-summary');
     dom.lengthSelector = document.getElementById('length-selector');
     dom.startBtn = document.getElementById('start-btn');
+    dom.resumeBtn = document.getElementById('resume-btn');
     dom.prevBtn = document.getElementById('prev-btn');
     dom.nextBtn = document.getElementById('next-btn');
     dom.reviewBtn = document.getElementById('review-btn');
@@ -89,6 +91,7 @@ function cacheDom() {
 
 function attachEventListeners() {
     dom.startBtn?.addEventListener('click', startAssessment);
+    dom.resumeBtn?.addEventListener('click', resumeAssessment);
     dom.lengthSelector?.addEventListener('change', handleLengthChange);
     dom.prevBtn?.addEventListener('click', () => navigateQuestion(-1));
     dom.nextBtn?.addEventListener('click', () => navigateQuestion(1));
@@ -184,6 +187,7 @@ async function initializeApp() {
         renderConfigSummary();
         renderHistory();
         configureUiFromSettings();
+        updateResumeButton();
         initializeAdminMode();
     } catch (error) {
         console.error('Failed to initialize application', error);
@@ -581,6 +585,18 @@ function configureUiFromSettings() {
     dom.timer.setAttribute('aria-hidden', 'true');
 }
 
+function updateResumeButton() {
+    if (!dom.resumeBtn) return;
+
+    const session = loadSession();
+    if (session) {
+        dom.resumeBtn.classList.remove('hidden');
+        dom.resumeBtn.textContent = `Resume Assessment (${session.currentIndex + 1}/${session.selectedQuestions.length})`;
+    } else {
+        dom.resumeBtn.classList.add('hidden');
+    }
+}
+
 function startAssessment() {
     if (!state.config || !state.questions) return;
 
@@ -588,6 +604,8 @@ function startAssessment() {
         closeAdminPanel({ silent: true });
     }
 
+    clearSession();
+    updateResumeButton();
     prepareSelectedQuestions();
 
     if (!state.selectedQuestions.length) {
@@ -607,6 +625,7 @@ function startAssessment() {
     updateNavigationState();
     updateProgress();
     startTimer();
+    saveSession();
     focusCurrentQuestion();
     announce('Assessment started. Question 1 of ' + state.selectedQuestions.length + '.');
 }
@@ -717,6 +736,7 @@ function handleAnswerChange(event) {
     state.answers.set(questionId, selectedOption);
     highlightSelectedOption(questionId);
     updateProgress();
+    saveSession();
 }
 
 function highlightSelectedOption(questionId) {
@@ -742,6 +762,7 @@ function navigateQuestion(direction) {
     updateNavigationState();
     updateProgress();
     focusCurrentQuestion();
+    saveSession();
 }
 
 function updateNavigationState() {
@@ -805,6 +826,7 @@ function handleReviewNavigation(event) {
     updateNavigationState();
     updateProgress();
     focusCurrentQuestion();
+    saveSession();
 }
 
 function returnToQuestions() {
@@ -818,6 +840,8 @@ function finalizeAssessment(autoSubmitted = false) {
     state.isComplete = true;
     state.autoSubmitted = autoSubmitted;
     stopTimer();
+    clearSession();
+    updateResumeButton();
 
     const results = computeResults();
     recordAttempt(results);
@@ -855,7 +879,7 @@ function computeResults() {
         correct: stats.correct,
         total: stats.total,
         percentage: stats.total ? Math.round((stats.correct / stats.total) * 100) : 0
-    }));
+    })).sort((a, b) => a.percentage - b.percentage);
 
     const preset = getActivePreset();
     const elapsedSeconds = state.startedAt
@@ -893,6 +917,16 @@ function renderResults(results) {
         parts.push(`Previous attempt: ${previous.percentage}% (${formatDelta(results.percentage - previous.percentage)}).`);
     }
 
+    const sortedByScore = [...results.categoryBreakdown].sort((a, b) => b.percentage - a.percentage);
+    const strongest = sortedByScore[0];
+    const weakest = sortedByScore[sortedByScore.length - 1];
+    if (strongest && weakest && results.categoryBreakdown.length > 1) {
+        parts.push(
+            `Strongest area: ${formatCategory(strongest.category)} (${strongest.percentage}%). ` +
+            `Biggest opportunity: ${formatCategory(weakest.category)} (${weakest.percentage}%).`
+        );
+    }
+
     dom.resultSummary.textContent = parts.join(' ');
 
     renderScoreBreakdown(results.categoryBreakdown);
@@ -903,8 +937,9 @@ function renderResults(results) {
 }
 
 function renderScoreBreakdown(breakdown) {
+    const weakest = breakdown.length > 1 ? breakdown[0] : null;
     const items = breakdown.map(({ category, correct, total, percentage }) => `
-        <div class="score-item">
+        <div class="score-item${weakest && category === weakest.category ? ' focus' : ''}">
             <div class="score-item-header">
                 <span>${formatCategory(category)}</span>
                 <span>${percentage}%</span>
@@ -912,7 +947,7 @@ function renderScoreBreakdown(breakdown) {
             <div class="score-item-progress">
                 <div class="score-item-fill" style="width:${percentage}%"></div>
             </div>
-            <p>${correct} of ${total} correct</p>
+            <p>${correct} of ${total} correct${weakest && category === weakest.category ? ' · Highest opportunity' : ''}</p>
         </div>
     `);
 
@@ -920,15 +955,19 @@ function renderScoreBreakdown(breakdown) {
 }
 
 function renderStrengthsAndWeaknesses(breakdown) {
-    const strengths = breakdown.filter(item => item.percentage >= state.config.strengthThreshold);
-    const weaknesses = breakdown.filter(item => item.percentage <= state.config.weaknessThreshold);
+    const strengths = breakdown
+        .filter(item => item.percentage >= state.config.strengthThreshold)
+        .sort((a, b) => b.percentage - a.percentage);
+    const weaknesses = breakdown
+        .filter(item => item.percentage <= state.config.weaknessThreshold)
+        .sort((a, b) => a.percentage - b.percentage);
 
     const strengthsContent = strengths.length
-        ? `<ul>${strengths.map(item => `<li>${formatCategory(item.category)} (${item.percentage}%)</li>`).join('')}</ul>`
+        ? `<p>You performed well in these areas:</p><ul>${strengths.map(item => `<li>${formatCategory(item.category)} (${item.percentage}%)</li>`).join('')}</ul>`
         : '<p>No categories above the strength threshold yet.</p>';
 
     const weaknessesContent = weaknesses.length
-        ? `<ul>${weaknesses.map(item => `<li>${formatCategory(item.category)} (${item.percentage}%)</li>`).join('')}</ul>`
+        ? `<p>Consider reviewing these areas to improve your next score:</p><ul>${weaknesses.map(item => `<li>${formatCategory(item.category)} (${item.percentage}%)</li>`).join('')}</ul>`
         : '<p>No categories below the weakness threshold! 🎉</p>';
 
     dom.strengthsWeaknesses.innerHTML = `
@@ -1097,7 +1136,7 @@ function updateProgress() {
     }
 }
 
-function startTimer() {
+function startTimer(restoredSeconds = null) {
     stopTimer();
 
     const timeLimit = getTimeLimit();
@@ -1107,13 +1146,16 @@ function startTimer() {
         return;
     }
 
-    state.remainingSeconds = timeLimit * 60;
+    state.remainingSeconds = Number.isInteger(restoredSeconds) && restoredSeconds > 0
+        ? restoredSeconds
+        : timeLimit * 60;
     dom.timer.setAttribute('aria-hidden', 'false');
     updateTimerDisplay();
 
     state.timerInterval = window.setInterval(() => {
         state.remainingSeconds -= 1;
         updateTimerDisplay();
+        saveSession();
 
         if (state.remainingSeconds <= 0) {
             stopTimer();
@@ -1143,7 +1185,103 @@ function stopTimer() {
     }
 }
 
+/* ---------------------------------------------------------------------------
+ * Active session persistence
+ * Saves progress to localStorage so an in-progress assessment can be resumed.
+ * ------------------------------------------------------------------------- */
+
+function loadSession() {
+    try {
+        const raw = window.localStorage.getItem(ACTIVE_SESSION_KEY);
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        if (!isValidSession(parsed)) {
+            window.localStorage.removeItem(ACTIVE_SESSION_KEY);
+            return null;
+        }
+        return parsed;
+    } catch (error) {
+        console.warn('Unable to read active session', error);
+        return null;
+    }
+}
+
+function isValidSession(session) {
+    return Boolean(session)
+        && typeof session === 'object'
+        && Array.isArray(session.selectedQuestions)
+        && session.selectedQuestions.length > 0
+        && Array.isArray(session.answers)
+        && session.answers.every(entry => Array.isArray(entry) && typeof entry[0] === 'string' && typeof entry[1] === 'number')
+        && Number.isInteger(session.currentIndex)
+        && session.currentIndex >= 0
+        && session.currentIndex < session.selectedQuestions.length;
+}
+
+function saveSession() {
+    if (!state.selectedQuestions.length || state.isComplete) return;
+
+    const session = {
+        selectedPreset: state.selectedPreset,
+        activeQuestionCounts: state.activeQuestionCounts,
+        selectedQuestions: state.selectedQuestions,
+        currentIndex: state.currentIndex,
+        answers: Array.from(state.answers.entries()),
+        startedAt: state.startedAt,
+        remainingSeconds: state.remainingSeconds,
+        savedAt: Date.now()
+    };
+
+    try {
+        window.localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
+    } catch (error) {
+        console.warn('Unable to save active session', error);
+    }
+}
+
+function clearSession() {
+    try {
+        window.localStorage.removeItem(ACTIVE_SESSION_KEY);
+    } catch (error) {
+        console.warn('Unable to clear active session', error);
+    }
+}
+
+function resumeAssessment() {
+    const session = loadSession();
+    if (!session) {
+        announce('No saved assessment found.');
+        return;
+    }
+
+    if (state.adminMode) {
+        closeAdminPanel({ silent: true });
+    }
+
+    state.selectedPreset = session.selectedPreset;
+    state.activeQuestionCounts = session.activeQuestionCounts;
+    state.selectedQuestions = session.selectedQuestions;
+    state.currentIndex = session.currentIndex;
+    state.answers = new Map(session.answers);
+    state.startedAt = session.startedAt;
+    state.isComplete = false;
+    state.autoSubmitted = false;
+    state.timerWarningsShown = new Set();
+
+    switchView('quiz');
+    renderQuestions();
+    updateNavigationState();
+    updateProgress();
+    startTimer(session.remainingSeconds);
+    saveSession();
+    focusCurrentQuestion();
+    announce('Assessment resumed. Question ' + (state.currentIndex + 1) + ' of ' + state.selectedQuestions.length + '.');
+}
+
 function resetAssessment() {
+    clearSession();
+    updateResumeButton();
     stopTimer();
     state.selectedQuestions = [];
     state.answers = new Map();
